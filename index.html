@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
+    <title>Quiz Interativo</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app">
+    <div class="container">
+        <h1>Quiz Interativo</h1>
         <div id="quiz-container">
-            <h1>Quiz</h1>
             <div id="question-container">
-                <p id="question"></p>
+                <p id="question-text">Pergunta aqui</p>
             </div>
             <div id="answers-container">
-                <button class="answer-btn" onclick="checkAnswer(0)">Alternativa 1</button>
-                <button class="answer-btn" onclick="checkAnswer(1)">Alternativa 2</button>
-                <button class="answer-btn" onclick="checkAnswer(2)">Alternativa 3</button>
-                <button class="answer-btn" onclick="checkAnswer(3)">Alternativa 4</button>
+                <!-- As opções de resposta serão geradas aqui -->
             </div>
-            <div id="result-container" style="display: none;">
-                <h2 id="result"></h2>
-                <button onclick="restartQuiz()">Jogar Novamente</button>
-            </div>
+            <button id="next-button" onclick="nextQuestion()">Próxima Pergunta</button>
+        </div>
+        <div id="result-container" class="hidden">
+            <h2>Você completou o quiz!</h2>
+            <p id="final-score">Sua pontuação final: 0</p>
+            <button onclick="restartQuiz()">Jogar Novamente</button>
         </div>
     </div>
 

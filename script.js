@@ -1,61 +1,83 @@
-let questions = [
+let currentQuestionIndex = 0; // Índice da pergunta atual
+let score = 0; // Pontuação inicial
+
+// Perguntas do quiz
+const questions = [
     {
         question: "Qual é a capital do Brasil?",
-        answers: ["São Paulo", "Brasília", "Rio de Janeiro", "Salvador"],
-        correctAnswer: 1
+        answers: ["Rio de Janeiro", "Brasília", "São Paulo", "Salvador"],
+        correctAnswer: "Brasília"
     },
     {
-        question: "Quem pintou a Mona Lisa?",
-        answers: ["Van Gogh", "Picasso", "Da Vinci", "Michelangelo"],
-        correctAnswer: 2
+        question: "Qual é o maior planeta do Sistema Solar?",
+        answers: ["Terra", "Marte", "Júpiter", "Saturno"],
+        correctAnswer: "Júpiter"
     },
     {
-        question: "Qual é o maior planeta do nosso sistema solar?",
-        answers: ["Terra", "Júpiter", "Saturno", "Marte"],
-        correctAnswer: 1
+        question: "Quem escreveu 'Dom Casmurro'?",
+        answers: ["Machado de Assis", "Carlos Drummond", "Clarice Lispector", "Monteiro Lobato"],
+        correctAnswer: "Machado de Assis"
     }
 ];
 
-let currentQuestionIndex = 0;
-let score = 0;
+// Exibe a pergunta e as opções
+function displayQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    document.getElementById("question-text").textContent = currentQuestion.question;
 
-function loadQuestion() {
-    const question = questions[currentQuestionIndex];
-    document.getElementById("question").textContent = question.question;
-    
-    const buttons = document.querySelectorAll(".answer-btn");
-    question.answers.forEach((answer, index) => {
-        buttons[index].textContent = answer;
+    // Limpar opções de resposta antigas
+    const answersContainer = document.getElementById("answers-container");
+    answersContainer.innerHTML = "";
+
+    // Criar botões de respostas
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.textContent = answer;
+        button.onclick = () => checkAnswer(answer);
+        answersContainer.appendChild(button);
     });
 }
 
-function checkAnswer(selectedAnswer) {
-    const question = questions[currentQuestionIndex];
-    if (selectedAnswer === question.correctAnswer) {
+// Verifica a resposta do usuário
+function checkAnswer(answer) {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (answer === currentQuestion.correctAnswer) {
         score++;
     }
+
+    document.getElementById("next-button").style.display = "block"; // Exibe o botão "Próxima Pergunta"
+}
+
+// Avança para a próxima pergunta
+function nextQuestion() {
     currentQuestionIndex++;
 
+    // Se ainda houver perguntas
     if (currentQuestionIndex < questions.length) {
-        loadQuestion();
+        displayQuestion();
+        document.getElementById("next-button").style.display = "none"; // Esconde o botão até a próxima resposta
     } else {
-        showResult();
+        showFinalScore();
     }
 }
 
-function showResult() {
-    document.getElementById("quiz-container").style.display = "none";
-    document.getElementById("result-container").style.display = "block";
-    document.getElementById("result").textContent = `Você acertou ${score} de ${questions.length} perguntas!`;
+// Exibe a pontuação final
+function showFinalScore() {
+    document.getElementById("quiz-container").style.display = "none"; // Esconde o quiz
+    document.getElementById("result-container").style.display = "block"; // Mostra o resultado
+    document.getElementById("final-score").textContent = `Sua pontuação final: ${score} de ${questions.length}`;
 }
 
+// Reinicia o quiz
 function restartQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     document.getElementById("quiz-container").style.display = "block";
     document.getElementById("result-container").style.display = "none";
-    loadQuestion();
+    displayQuestion();
+    document.getElementById("next-button").style.display = "none"; // Esconde o botão de próxima
 }
 
-// Carregar a primeira pergunta ao iniciar
-loadQuestion();
+// Inicializa o quiz
+displayQuestion();
