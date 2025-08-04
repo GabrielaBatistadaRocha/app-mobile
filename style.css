@@ -1,11 +1,9 @@
-/* Resetando algumas margens e paddings */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Estilo da página */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f7f6;
@@ -16,7 +14,6 @@ body {
     height: 100vh;
 }
 
-/* Container principal */
 .container {
     background-color: #fff;
     padding: 20px;
@@ -27,25 +24,21 @@ body {
     text-align: center;
 }
 
-/* Título */
 h1 {
     font-size: 32px;
     margin-bottom: 20px;
     color: #4CAF50;
 }
 
-/* Container do quiz */
 #quiz-container {
     margin-bottom: 20px;
 }
 
-/* Estilo da pergunta */
 #question-text {
     font-size: 20px;
     margin-bottom: 15px;
 }
 
-/* Estilo dos botões de resposta */
 button {
     background-color: #4CAF50;
     color: white;
@@ -55,19 +48,12 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
     background-color: #45a049;
-}
-
-/* Estilo de exibição da pontuação final */
-#result-container {
-    text-align: center;
-}
-
-.hidden {
-    display: none;
+    transform: scale(1.05);
 }
 
 #next-button {
@@ -76,4 +62,20 @@ button:hover {
 
 #next-button:hover {
     background-color: #0056b3;
+}
+
+#result-container {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.correct {
+    background-color: #28a745 !important;
+}
+
+.incorrect {
+    background-color: #dc3545 !important;
 }

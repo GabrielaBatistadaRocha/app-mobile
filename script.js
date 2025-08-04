@@ -1,7 +1,6 @@
-let currentQuestionIndex = 0; // Índice da pergunta atual
-let score = 0; // Pontuação inicial
+let currentQuestionIndex = 0;
+let score = 0;
 
-// Perguntas do quiz
 const questions = [
     {
         question: "Qual é a capital do Brasil?",
@@ -20,64 +19,75 @@ const questions = [
     }
 ];
 
-// Exibe a pergunta e as opções
 function displayQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
-    document.getElementById("question-text").textContent = currentQuestion.question;
+    document.getElementById("question-text").textContent = `(${currentQuestionIndex + 1}/${questions.length}) ${currentQuestion.question}`;
 
-    // Limpar opções de resposta antigas
     const answersContainer = document.getElementById("answers-container");
     answersContainer.innerHTML = "";
 
-    // Criar botões de respostas
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button");
         button.textContent = answer;
-        button.onclick = () => checkAnswer(answer);
+        button.onclick = () => checkAnswer(button, answer);
         answersContainer.appendChild(button);
     });
+
+    document.getElementById("next-button").style.display = "none";
 }
 
-// Verifica a resposta do usuário
-function checkAnswer(answer) {
+function checkAnswer(buttonClicked, answer) {
     const currentQuestion = questions[currentQuestionIndex];
+    const buttons = document.querySelectorAll("#answers-container button");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === currentQuestion.correctAnswer) {
+            btn.classList.add("correct");
+        } else if (btn === buttonClicked) {
+            btn.classList.add("incorrect");
+        }
+    });
 
     if (answer === currentQuestion.correctAnswer) {
         score++;
     }
 
-    document.getElementById("next-button").style.display = "block"; // Exibe o botão "Próxima Pergunta"
+    document.getElementById("next-button").style.display = "block";
 }
 
-// Avança para a próxima pergunta
 function nextQuestion() {
     currentQuestionIndex++;
 
-    // Se ainda houver perguntas
     if (currentQuestionIndex < questions.length) {
         displayQuestion();
-        document.getElementById("next-button").style.display = "none"; // Esconde o botão até a próxima resposta
     } else {
         showFinalScore();
     }
 }
 
-// Exibe a pontuação final
 function showFinalScore() {
-    document.getElementById("quiz-container").style.display = "none"; // Esconde o quiz
-    document.getElementById("result-container").style.display = "block"; // Mostra o resultado
-    document.getElementById("final-score").textContent = `Sua pontuação final: ${score} de ${questions.length}`;
+    document.getElementById("quiz-container").style.display = "none";
+    document.getElementById("result-container").style.display = "block";
+
+    let message = "";
+    if (score === questions.length) {
+        message = "Parabéns! Você acertou todas!";
+    } else if (score > 0) {
+        message = "Bom trabalho! Mas ainda dá pra melhorar.";
+    } else {
+        message = "Ops! Nenhuma resposta correta. Tente novamente!";
+    }
+
+    document.getElementById("final-score").textContent = `${message} Sua pontuação final: ${score} de ${questions.length}`;
 }
 
-// Reinicia o quiz
 function restartQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     document.getElementById("quiz-container").style.display = "block";
     document.getElementById("result-container").style.display = "none";
     displayQuestion();
-    document.getElementById("next-button").style.display = "none"; // Esconde o botão de próxima
 }
 
-// Inicializa o quiz
 displayQuestion();
