@@ -43,6 +43,7 @@ let selectedQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
+let currentSubject = "";
 
 const welcomeScreen = document.getElementById("welcome-screen");
 const quizContainer = document.getElementById("quiz-container");
@@ -71,6 +72,7 @@ function shuffleArray(array) {
 function startQuiz(subject) {
   if (!subject) return;
 
+  currentSubject = subject;
   selectedQuestions = [...questionBank[subject]];
   shuffleArray(selectedQuestions);
   currentQuestionIndex = 0;
@@ -105,7 +107,6 @@ function displayQuestion() {
   document.getElementById("next-button").classList.add("hidden");
   document.getElementById("explanation-text").classList.add("hidden");
 
-  // Inicia o temporizador
   startTimer(15);
 }
 
@@ -163,11 +164,10 @@ function showFinalScore() {
   quizContainer.classList.add("hidden");
   resultContainer.classList.remove("hidden");
 
-  const subject = selectedQuestions[0].subject; // Usar a matéria da primeira pergunta
   const total = selectedQuestions.length;
   const timestamp = new Date().toLocaleString();
 
-  saveScore(subject, score, total, timestamp);
+  saveScore(currentSubject, score, total, timestamp);
   loadHistory();
 
   let message = "";
@@ -200,7 +200,7 @@ function loadHistory() {
   const list = document.createElement("ul");
   history.forEach(entry => {
     const item = document.createElement("li");
-    item.textContent = `${entry.timestamp} - ${entry.subject} - ${entry.score}/${entry.total}`;
+    item.textContent = `${entry.timestamp.split(' ')[0]} - ${entry.subject} - ${entry.score}/${entry.total}`;
     list.appendChild(item);
   });
 
@@ -210,7 +210,7 @@ function loadHistory() {
 
 function renderChart(history) {
   const ctx = scoreChartElement.getContext("2d");
-  const labels = history.map(entry => entry.timestamp);
+  const labels = history.map(entry => entry.timestamp.split(' ')[0]);
   const data = history.map(entry => (entry.score / entry.total) * 100);
 
   if (window.myChart instanceof Chart) {
@@ -260,6 +260,8 @@ function exportCSV() {
 function restartQuiz() {
   quizContainer.classList.add("hidden");
   resultContainer.classList.add("hidden");
+  historyContainer.classList.add("hidden");
+  scoreChartElement.classList.add("hidden");
   welcomeScreen.classList.remove("hidden");
 }
 
@@ -274,8 +276,3 @@ function toggleChart() {
   historyContainer.classList.add("hidden");
   loadHistory();
 }
-
-// Adiciona um evento para garantir que a matéria seja salva no histórico
-Object.keys(questionBank).forEach(subject => {
-  questionBank[subject].forEach(q => q.subject = subject);
-});

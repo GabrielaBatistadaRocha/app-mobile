@@ -4,7 +4,18 @@
   --bg-color: #f4f7f6;
   --container-bg-color: #fff;
   --text-color: #333;
-  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --border-radius: 12px;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --container-bg-color: #2c2c2c;
+  --text-color: #e0e0e0;
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --primary-color: #66bb6a;
+  --secondary-color: #42a5f5;
 }
 
 * {
@@ -23,16 +34,6 @@ body {
   align-items: center;
   padding: 40px 20px;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-  --bg-color: #1a1a1a;
-  --container-bg-color: #2c2c2c;
-  --text-color: #e0e0e0;
-  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --primary-color: #66bb6a;
-  --secondary-color: #42a5f5;
 }
 
 .container {
@@ -75,21 +76,15 @@ h1 {
 main, aside, #welcome-screen {
   background-color: var(--container-bg-color);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
+  text-align: center;
 }
 
 #welcome-screen {
   grid-column: 1 / -1;
-  text-align: center;
 }
 
-
-#timer-fill {
-  height: 100%;
-  width: 100%;
-  background-color: var(--secondary-color);
- 
 #welcome-screen h2 {
   margin-bottom: 20px;
   font-weight: 600;
@@ -107,10 +102,10 @@ main, aside, #welcome-screen {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   border: 2px solid transparent;
   cursor: pointer;
   background-color: var(--primary-color);
@@ -118,14 +113,14 @@ main, aside, #welcome-screen {
   transition: all 0.3s ease;
 }
 
-.subject-card i {
-  font-size: 40px;
-  margin-bottom: 10px;
-}
-
 .subject-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.subject-card i {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
 #quiz-container {
@@ -154,7 +149,7 @@ main, aside, #welcome-screen {
 }
 
 #question-text {
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -163,8 +158,8 @@ main, aside, #welcome-screen {
   background-color: #f0f0f0;
   color: var(--text-color);
   border: 1px solid #ccc;
-  padding: 12px;
-  margin: 8px 0;
+  padding: 15px;
+  margin: 10px 0;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
@@ -173,13 +168,23 @@ main, aside, #welcome-screen {
   transition: all 0.2s ease;
 }
 
+body.dark-mode #answers-container button {
+  background-color: #444;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
 #answers-container button:hover:not(:disabled) {
   background-color: #e0e0e0;
   transform: translateY(-2px);
 }
 
-#answers-container button:active:not(:disabled) {
-  transform: scale(0.98);
+body.dark-mode #answers-container button:hover:not(:disabled) {
+  background-color: #555;
+}
+
+#answers-container button:disabled {
+  cursor: not-allowed;
 }
 
 .correct {
@@ -217,8 +222,8 @@ body.dark-mode #explanation-text {
   background-color: var(--secondary-color);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   margin-top: 15px;
@@ -231,7 +236,7 @@ body.dark-mode #explanation-text {
 
 #final-score {
   margin: 15px 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -248,7 +253,7 @@ body.dark-mode #explanation-text {
 }
 
 .controls button:hover {
-  background-color: rgb(150, 67, 150);
+  background-color: #45a049;
 }
 
 @media (max-width: 768px) {
@@ -270,8 +275,8 @@ body.dark-mode #explanation-text {
     gap: 10px;
   }
   .subject-card {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
   h1 {
     font-size: 28px;
