@@ -27,7 +27,7 @@ body {
 h1 {
     font-size: 32px;
     margin-bottom: 20px;
-    color: #4CAF50;
+    color: rgb(150, 67, 150);
 }
 
 #quiz-container {
