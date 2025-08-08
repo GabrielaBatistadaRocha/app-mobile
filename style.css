@@ -30,8 +30,14 @@ h1 {
     color: rgb(150, 67, 150);
 }
 
-#quiz-container {
+#subject-selector {
     margin-bottom: 20px;
+}
+
+#subject-select {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
 #question-text {
@@ -64,18 +70,14 @@ button:hover {
     background-color: #0056b3;
 }
 
-#result-container {
-    text-align: center;
-}
-
-.hidden {
-    display: none;
-}
-
 .correct {
     background-color: #28a745 !important;
 }
 
 .incorrect {
     background-color: #dc3545 !important;
+}
+
+.hidden {
+    display: none;
 }

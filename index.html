@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo</title>
+    <title>Quiz ENEM</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Quiz Interativo</h1>
-        <div id="quiz-container">
+        <h1>Quiz ENEM</h1>
+
+        <div id="subject-selector">
+            <label for="subject-select">Escolha uma matéria:</label>
+            <select id="subject-select" onchange="startQuiz()">
+                <option value="">-- Selecione --</option>
+                <option value="matematica">Matemática</option>
+                <option value="ciencias">Ciências da Natureza</option>
+                <option value="humanas">Ciências Humanas</option>
+                <option value="linguagens">Linguagens e Códigos</option>
+            </select>
+        </div>
+
+        <div id="quiz-container" style="display: none;">
             <div id="question-container">
                 <p id="question-text">Pergunta aqui</p>
             </div>
-            <div id="answers-container">
-                <!-- As opções de resposta serão geradas aqui -->
-            </div>
+            <div id="answers-container"></div>
             <button id="next-button" onclick="nextQuestion()" style="display: none;">Próxima Pergunta</button>
         </div>
+
         <div id="result-container" class="hidden">
             <h2>Você completou o quiz!</h2>
             <p id="final-score">Sua pontuação final: 0</p>
