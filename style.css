@@ -248,7 +248,7 @@ body.dark-mode #explanation-text {
 }
 
 .controls button:hover {
-  background-color: #45a049;
+  background-color: rgb(150, 67, 150);
 }
 
 @media (max-width: 768px) {
