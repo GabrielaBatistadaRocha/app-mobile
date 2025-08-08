@@ -42,6 +42,24 @@ const questionBank = {
 let selectedQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
+let timerInterval;
+
+const welcomeScreen = document.getElementById("welcome-screen");
+const quizContainer = document.getElementById("quiz-container");
+const resultContainer = document.getElementById("result-container");
+const historyContainer = document.getElementById("history-container");
+const scoreChartElement = document.getElementById("scoreChart");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+darkModeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  localStorage.setItem('dark-mode', isDarkMode);
+});
+
+if (localStorage.getItem('dark-mode') === 'true') {
+  document.body.classList.add('dark-mode');
+}
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -50,19 +68,19 @@ function shuffleArray(array) {
   }
 }
 
-function startQuiz() {
-  const subject = document.getElementById("subject-select").value;
+function startQuiz(subject) {
   if (!subject) return;
 
-  selectedQuestions = [...questionBank[subject]]; // Cria uma cópia para não alterar o original
-  shuffleArray(selectedQuestions); // Embaralha as perguntas
+  selectedQuestions = [...questionBank[subject]];
+  shuffleArray(selectedQuestions);
   currentQuestionIndex = 0;
   score = 0;
 
-  document.getElementById("quiz-container").classList.remove("hidden");
-  document.getElementById("result-container").classList.add("hidden");
-  document.getElementById("history-container").classList.add("hidden");
-  document.getElementById("scoreChart").classList.add("hidden");
+  welcomeScreen.classList.add("hidden");
+  quizContainer.classList.remove("hidden");
+  resultContainer.classList.add("hidden");
+  historyContainer.classList.add("hidden");
+  scoreChartElement.classList.add("hidden");
 
   displayQuestion();
 }
@@ -74,8 +92,8 @@ function displayQuestion() {
   const answersContainer = document.getElementById("answers-container");
   answersContainer.innerHTML = "";
 
-  const shuffledAnswers = [...currentQuestion.answers]; // Cria uma cópia das respostas
-  shuffleArray(shuffledAnswers); // Embaralha as respostas
+  const shuffledAnswers = [...currentQuestion.answers];
+  shuffleArray(shuffledAnswers);
 
   shuffledAnswers.forEach(answer => {
     const button = document.createElement("button");
@@ -86,9 +104,31 @@ function displayQuestion() {
 
   document.getElementById("next-button").classList.add("hidden");
   document.getElementById("explanation-text").classList.add("hidden");
+
+  // Inicia o temporizador
+  startTimer(15);
+}
+
+function startTimer(duration) {
+  let timeLeft = duration;
+  const timerFill = document.getElementById("timer-fill");
+  timerFill.style.width = '100%';
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const percentage = (timeLeft / duration) * 100;
+    timerFill.style.width = `${percentage}%`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      checkAnswer(null, 'timeout');
+    }
+  }, 1000);
 }
 
 function checkAnswer(buttonClicked, answer) {
+  clearInterval(timerInterval);
   const currentQuestion = selectedQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answers-container button");
 
@@ -120,10 +160,10 @@ function nextQuestion() {
 }
 
 function showFinalScore() {
-  document.getElementById("quiz-container").classList.add("hidden");
-  document.getElementById("result-container").classList.remove("hidden");
+  quizContainer.classList.add("hidden");
+  resultContainer.classList.remove("hidden");
 
-  const subject = document.getElementById("subject-select").value;
+  const subject = selectedQuestions[0].subject; // Usar a matéria da primeira pergunta
   const total = selectedQuestions.length;
   const timestamp = new Date().toLocaleString();
 
@@ -134,7 +174,7 @@ function showFinalScore() {
   if (score === total) {
     message = "Parabéns! Você acertou todas!";
   } else if (score > 0) {
-    message = "Bom trabalho! Mas ainda dá pra melhorar.";
+    message = "Bom trabalho! Mas ainda dá para melhorar.";
   } else {
     message = "Ops! Nenhuma resposta correta. Tente novamente!";
   }
@@ -150,7 +190,6 @@ function saveScore(subject, score, total, timestamp) {
 
 function loadHistory() {
   const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
-  const historyContainer = document.getElementById("history-container");
   historyContainer.innerHTML = "<h3>Histórico de Pontuação:</h3>";
 
   if (history.length === 0) {
@@ -166,19 +205,14 @@ function loadHistory() {
   });
 
   historyContainer.appendChild(list);
-  
-  const scoreChartElement = document.getElementById("scoreChart");
-  if (scoreChartElement) {
-    renderChart(history);
-  }
+  renderChart(history);
 }
 
 function renderChart(history) {
-  const ctx = document.getElementById("scoreChart").getContext("2d");
+  const ctx = scoreChartElement.getContext("2d");
   const labels = history.map(entry => entry.timestamp);
   const data = history.map(entry => (entry.score / entry.total) * 100);
 
-  // Destrua a instância do gráfico anterior se ela existir
   if (window.myChart instanceof Chart) {
     window.myChart.destroy();
   }
@@ -224,19 +258,24 @@ function exportCSV() {
 }
 
 function restartQuiz() {
-  startQuiz();
+  quizContainer.classList.add("hidden");
+  resultContainer.classList.add("hidden");
+  welcomeScreen.classList.remove("hidden");
 }
 
 function toggleHistory() {
-  const historyContainer = document.getElementById("history-container");
-  const scoreChart = document.getElementById("scoreChart");
   historyContainer.classList.toggle("hidden");
-  scoreChart.classList.add("hidden"); // Garante que o gráfico não aparece junto
+  scoreChartElement.classList.add("hidden");
+  loadHistory();
 }
 
 function toggleChart() {
-  const scoreChart = document.getElementById("scoreChart");
-  const historyContainer = document.getElementById("history-container");
-  scoreChart.classList.toggle("hidden");
-  historyContainer.classList.add("hidden"); // Garante que o histórico não aparece junto
+  scoreChartElement.classList.toggle("hidden");
+  historyContainer.classList.add("hidden");
+  loadHistory();
 }
+
+// Adiciona um evento para garantir que a matéria seja salva no histórico
+Object.keys(questionBank).forEach(subject => {
+  questionBank[subject].forEach(q => q.subject = subject);
+});

@@ -1,3 +1,12 @@
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #007BFF;
+  --bg-color: #f4f7f6;
+  --container-bg-color: #fff;
+  --text-color: #333;
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,13 +15,24 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f4f7f6;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center; /* Alterado para centralizar verticalmente */
+  align-items: center;
   padding: 40px 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --container-bg-color: #2c2c2c;
+  --text-color: #e0e0e0;
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --primary-color: #66bb6a;
+  --secondary-color: #42a5f5;
 }
 
 .container {
@@ -25,84 +45,143 @@ body {
 
 header {
   grid-column: 1 / -1;
-  text-align: center;
   margin-bottom: 20px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
   font-size: 32px;
-  margin-bottom: 10px;
-  color: #4CAF50;
+  color: var(--primary-color);
 }
 
-#subject-selector {
-  margin-bottom: 10px;
+#dark-mode-toggle {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
-#subject-select {
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+#dark-mode-toggle:hover {
+  color: var(--primary-color);
 }
 
-main, aside {
-  background-color: #fff;
+main, aside, #welcome-screen {
+  background-color: var(--container-bg-color);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Sombras mais suaves */
+  box-shadow: var(--card-shadow);
+}
+
+#welcome-screen {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+#welcome-screen h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+#subject-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.subject-card i {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.subject-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#quiz-container {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+#timer-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#timer-fill {
+  height: 100%;
+  width: 100%;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  transition: width linear;
 }
 
 #question-text {
   font-size: 20px;
   margin-bottom: 15px;
+  font-weight: 600;
 }
 
 #answers-container button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px;
+  background-color: #f0f0f0;
+  color: var(--text-color);
+  border: 1px solid #ccc;
+  padding: 12px;
   margin: 8px 0;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: left;
+  transition: all 0.2s ease;
 }
 
-#answers-container button:hover {
-  background-color: #45a049;
-  transform: scale(1.02);
+#answers-container button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
 }
 
-#answers-container button:active { /* Efeito de clique adicionado */
+#answers-container button:active:not(:disabled) {
   transform: scale(0.98);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-#next-button {
-  background-color: #007BFF;
-  margin-top: 15px;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-#next-button:hover {
-  background-color: #0056b3;
 }
 
 .correct {
   background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
 }
 
 .incorrect {
   background-color: #dc3545 !important;
+  color: white !important;
+  border-color: #dc3545 !important;
 }
 
 .hidden {
@@ -110,30 +189,40 @@ main, aside {
 }
 
 #explanation-text {
-  margin-top: 10px;
+  margin-top: 15px;
   font-style: italic;
   color: #555;
+  background-color: #e9f5ff;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+body.dark-mode #explanation-text {
+  background-color: #3b3b3b;
+  color: #ccc;
+}
+
+#next-button, .controls button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#next-button:hover, .controls button:hover {
+  background-color: #0056b3;
 }
 
 #final-score {
   margin: 15px 0;
   font-size: 18px;
-}
-
-#history-container ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-}
-
-#history-container li {
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-canvas {
-  margin-top: 20px;
-  max-width: 100%;
+  font-weight: 600;
 }
 
 .controls {
@@ -144,14 +233,8 @@ canvas {
 }
 
 .controls button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
+  background-color: var(--primary-color);
   font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .controls button:hover {
@@ -162,18 +245,25 @@ canvas {
   .container {
     grid-template-columns: 1fr;
   }
-
   aside {
     margin-top: 20px;
   }
-
   .controls {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
   }
-
   .controls button {
     flex: 1 1 45%;
+  }
+  #subject-cards {
+    gap: 10px;
+  }
+  .subject-card {
+    width: 100px;
+    height: 100px;
+  }
+  h1 {
+    font-size: 28px;
   }
 }

@@ -7,26 +7,45 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Quiz Interativo</h1>
-      <div id="subject-selector">
-        <select id="subject-select">
-          <option value="">Selecione um assunto</option>
-          <option value="matematica">Matemática</option>
-          <option value="ciencias">Ciências</option>
-          <option value="humanas">Humanas</option>
-          <option value="linguagens">Linguagens</option>
-        </select>
-        <button onclick="startQuiz()">Iniciar</button>
+      <div class="header-content">
+        <h1>Quiz Interativo</h1>
+        <button id="dark-mode-toggle" title="Alternar modo escuro"><i class="fa-solid fa-moon"></i></button>
       </div>
     </header>
 
+    <div id="welcome-screen">
+      <h2>Escolha uma matéria para começar</h2>
+      <div id="subject-cards">
+        <button class="subject-card" onclick="startQuiz('matematica')">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Matemática</span>
+        </button>
+        <button class="subject-card" onclick="startQuiz('ciencias')">
+          <i class="fa-solid fa-flask"></i>
+          <span>Ciências</span>
+        </button>
+        <button class="subject-card" onclick="startQuiz('humanas')">
+          <i class="fa-solid fa-users"></i>
+          <span>Humanas</span>
+        </button>
+        <button class="subject-card" onclick="startQuiz('linguagens')">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Linguagens</span>
+        </button>
+      </div>
+    </div>
+
     <main id="quiz-container" class="hidden">
+      <div id="timer-bar">
+        <div id="timer-fill"></div>
+      </div>
       <div id="question-text"></div>
       <div id="answers-container"></div>
       <div id="explanation-text" class="hidden"></div>
