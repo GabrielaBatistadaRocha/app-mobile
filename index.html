@@ -1,40 +1,50 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz ENEM</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Quiz ENEM</h1>
+    <header>
+      <h1>🎓 Quiz ENEM</h1>
+      <div class="controls">
+        <select id="subject-select" onchange="startQuiz()">
+          <option value="">-- Selecione a matéria --</option>
+          <option value="matematica">Matemática</option>
+          <option value="ciencias">Ciências da Natureza</option>
+          <option value="humanas">Ciências Humanas</option>
+          <option value="linguagens">Linguagens e Códigos</option>
+        </select>
+        <div class="buttons">
+          <button onclick="toggleHistory()">📜 Histórico</button>
+          <button onclick="showGraph()">📊 Gráfico</button>
+        </div>
+      </div>
+    </header>
 
-    <div id="subject-selector">
-      <label for="subject-select">Escolha uma matéria:</label>
-      <select id="subject-select" onchange="startQuiz()">
-        <option value="">-- Selecione --</option>
-        <option value="matematica">Matemática</option>
-        <option value="ciencias">Ciências da Natureza</option>
-        <option value="humanas">Ciências Humanas</option>
-        <option value="linguagens">Linguagens e Códigos</option>
-      </select>
-    </div>
+    <main>
+      <section id="quiz-container" class="hidden">
+        <p id="question-text"></p>
+        <div id="answers-container"></div>
+        <p id="explanation-text" class="hidden"></p>
+        <button id="next-button" onclick="nextQuestion()" class="hidden">Próxima Pergunta</button>
+      </section>
 
-    <div id="quiz-container" class="hidden">
-      <p id="question-text"></p>
-      <div id="answers-container"></div>
-      <p id="explanation-text" class="hidden"></p>
-      <button id="next-button" onclick="nextQuestion()" class="hidden">Próxima Pergunta</button>
-    </div>
+      <section id="result-container" class="hidden">
+        <h2>✅ Quiz Finalizado!</h2>
+        <p id="final-score"></p>
+        <button onclick="restartQuiz()">🔄 Jogar Novamente</button>
+      </section>
+    </main>
 
-    <div id="result-container" class="hidden">
-      <h2>Você completou o quiz!</h2>
-      <p id="final-score"></p>
-      <button onclick="restartQuiz()">Jogar Novamente</button>
-    </div>
-
-    <div id="history-container" class="hidden"></div>
+    <aside id="history-panel" class="hidden">
+      <h3>📜 Histórico de Respostas</h3>
+      <div id="history-container"></div>
+      <canvas id="scoreChart" class="hidden" width="400" height="200"></canvas>
+    </aside>
   </div>
 
   <script src="script.js"></script>

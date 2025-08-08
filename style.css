@@ -8,36 +8,81 @@ body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f7f6;
   color: #333;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;
+  padding: 40px 20px;
 }
 
 .container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 30px;
+  max-width: 1000px;
   width: 100%;
-  max-width: 600px;
+}
+
+header {
+  grid-column: 1 / -1;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 h1 {
   font-size: 32px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #4CAF50;
 }
 
 #subject-selector {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 #subject-select {
   padding: 8px;
   font-size: 16px;
   border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.controls button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #5a6268;
+}
+
+main {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+aside {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 #question-text {
@@ -45,25 +90,27 @@ h1 {
   margin-bottom: 15px;
 }
 
-button {
+#answers-container button {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 10px;
+  margin: 8px 0;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  width: 100%;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
+#answers-container button:hover {
   background-color: #45a049;
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 #next-button {
   background-color: #007BFF;
+  margin-top: 15px;
 }
 
 #next-button:hover {
@@ -88,6 +135,11 @@ button:hover {
   color: #555;
 }
 
+#final-score {
+  margin: 15px 0;
+  font-size: 18px;
+}
+
 #history-container ul {
   list-style: none;
   padding: 0;
@@ -97,4 +149,9 @@ button:hover {
 #history-container li {
   margin-bottom: 5px;
   font-size: 14px;
+}
+
+canvas {
+  margin-top: 20px;
+  max-width: 100%;
 }

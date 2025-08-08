@@ -113,12 +113,16 @@ function showFinalScore() {
   document.getElementById("result-container").classList.remove("hidden");
 
   const subject = document.getElementById("subject-select").value;
-  saveScore(subject, score, selectedQuestions.length);
+  const total = selectedQuestions.length;
+  const timestamp = new Date().toLocaleString();
+
+  saveScore(subject, score, total, timestamp);
   loadHistory();
+
   document.getElementById("history-container").classList.remove("hidden");
 
   let message = "";
-  if (score === selectedQuestions.length) {
+  if (score === total) {
     message = "Parabéns! Você acertou todas!";
   } else if (score > 0) {
     message = "Bom trabalho! Mas ainda dá pra melhorar.";
@@ -126,15 +130,14 @@ function showFinalScore() {
     message = "Ops! Nenhuma resposta correta. Tente novamente!";
   }
 
-  document.getElementById("final-score").textContent = `${message} Sua pontuação final: ${score} de ${selectedQuestions.length}`;
+  document.getElementById("final-score").textContent = `${message} Sua pontuação final: ${score} de ${total}`;
 }
 
-function restartQuiz() {
-  startQuiz();
-}
-
+function saveScore(subject, score, total, timestamp) {
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
   history.push({ subject, score, total, timestamp });
   localStorage.setItem("quizHistory", JSON.stringify(history));
+}
 
 function loadHistory() {
   const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
@@ -154,4 +157,55 @@ function loadHistory() {
   });
 
   historyContainer.appendChild(list);
+  renderChart(history);
+}
+
+function renderChart(history) {
+  const ctx = document.getElementById("scoreChart").getContext("2d");
+
+  const labels = history.map(entry => entry.timestamp);
+  const data = history.map(entry => (entry.score / entry.total) * 100);
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Desempenho (%)",
+        data: data,
+        borderColor: "#4CAF50",
+        backgroundColor: "rgba(76, 175, 80, 0.2)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+}
+
+function exportCSV() {
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+  if (history.length === 0) return alert("Nenhum dado para exportar.");
+
+  let csv = "Data,Assunto,Pontuação,Total\n";
+  history.forEach(entry => {
+    csv += `${entry.timestamp},${entry.subject},${entry.score},${entry.total}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "historico_quiz.csv";
+  link.click();
+}
+
+function restartQuiz() {
+  startQuiz();
 }
