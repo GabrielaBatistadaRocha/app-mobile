@@ -51,7 +51,7 @@ const resultContainer = document.getElementById("result-container");
 const historyContainer = document.getElementById("history-container");
 const scoreChartElement = document.getElementById("scoreChart");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
-const aside = document.querySelector('aside'); // Seleciona o elemento aside
+const aside = document.getElementById("aside-container");
 
 darkModeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
@@ -84,7 +84,7 @@ function startQuiz(subject) {
   resultContainer.classList.add("hidden");
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
-  aside.classList.add("hidden"); // Garante que a barra lateral esteja escondida ao iniciar
+  aside.classList.add("hidden");
 
   displayQuestion();
 }
@@ -165,7 +165,7 @@ function nextQuestion() {
 function showFinalScore() {
   quizContainer.classList.add("hidden");
   resultContainer.classList.remove("hidden");
-  aside.classList.remove("hidden"); // Mostra o aside ao final do quiz
+  aside.classList.remove("hidden");
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
 
@@ -267,7 +267,7 @@ function restartQuiz() {
   resultContainer.classList.add("hidden");
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
-  aside.classList.add("hidden"); // Esconde o aside ao reiniciar
+  aside.classList.add("hidden");
   welcomeScreen.classList.remove("hidden");
 }
 
