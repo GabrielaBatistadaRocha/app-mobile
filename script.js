@@ -163,6 +163,8 @@ function nextQuestion() {
 function showFinalScore() {
   quizContainer.classList.add("hidden");
   resultContainer.classList.remove("hidden");
+  historyContainer.classList.add("hidden");
+  scoreChartElement.classList.add("hidden");
 
   const total = selectedQuestions.length;
   const timestamp = new Date().toLocaleString();
@@ -276,3 +278,8 @@ function toggleChart() {
   historyContainer.classList.add("hidden");
   loadHistory();
 }
+
+// Adiciona um evento para garantir que a matéria seja salva no histórico
+Object.keys(questionBank).forEach(subject => {
+  questionBank[subject].forEach(q => q.subject = subject);
+});
