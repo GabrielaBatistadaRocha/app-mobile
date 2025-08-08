@@ -84,6 +84,12 @@ main, aside, #welcome-screen {
   text-align: center;
 }
 
+
+#timer-fill {
+  height: 100%;
+  width: 100%;
+  background-color: var(--secondary-color);
+ 
 #welcome-screen h2 {
   margin-bottom: 20px;
   font-weight: 600;
@@ -133,6 +139,10 @@ main, aside, #welcome-screen {
   background-color: #ddd;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+
+#quiz-container.hidden #timer-bar {
+  display: none;
 }
 
 #timer-fill {
