@@ -1,83 +1,100 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
 }
 
 h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: rgb(150, 67, 150);
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #4CAF50;
 }
 
 #subject-selector {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #subject-select {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 5px;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
 }
 
 #question-text {
-    font-size: 20px;
-    margin-bottom: 15px;
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
 button {
-    background-color: rgb(150, 67, 150);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: rgb(150, 67, 150);
-    transform: scale(1.05);
+  background-color: #45a049;
+  transform: scale(1.05);
 }
 
 #next-button {
-    background-color: #007BFF;
+  background-color: #007BFF;
 }
 
 #next-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .correct {
-    background-color: #28a745 !important;
+  background-color: #28a745 !important;
 }
 
 .incorrect {
-    background-color: #dc3545 !important;
+  background-color: #dc3545 !important;
 }
 
 .hidden {
-    display: none;
+  display: none;
+}
+
+#explanation-text {
+  margin-top: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+#history-container ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+#history-container li {
+  margin-bottom: 5px;
+  font-size: 14px;
 }
