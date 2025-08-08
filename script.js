@@ -43,11 +43,19 @@ let selectedQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 function startQuiz() {
   const subject = document.getElementById("subject-select").value;
   if (!subject) return;
 
-  selectedQuestions = questionBank[subject];
+  selectedQuestions = [...questionBank[subject]]; // Cria uma cópia para não alterar o original
+  shuffleArray(selectedQuestions); // Embaralha as perguntas
   currentQuestionIndex = 0;
   score = 0;
 
@@ -66,7 +74,10 @@ function displayQuestion() {
   const answersContainer = document.getElementById("answers-container");
   answersContainer.innerHTML = "";
 
-  currentQuestion.answers.forEach(answer => {
+  const shuffledAnswers = [...currentQuestion.answers]; // Cria uma cópia das respostas
+  shuffleArray(shuffledAnswers); // Embaralha as respostas
+
+  shuffledAnswers.forEach(answer => {
     const button = document.createElement("button");
     button.textContent = answer;
     button.onclick = () => checkAnswer(button, answer);
@@ -155,7 +166,11 @@ function loadHistory() {
   });
 
   historyContainer.appendChild(list);
-  renderChart(history);
+  
+  const scoreChartElement = document.getElementById("scoreChart");
+  if (scoreChartElement) {
+    renderChart(history);
+  }
 }
 
 function renderChart(history) {
@@ -163,7 +178,12 @@ function renderChart(history) {
   const labels = history.map(entry => entry.timestamp);
   const data = history.map(entry => (entry.score / entry.total) * 100);
 
-  new Chart(ctx, {
+  // Destrua a instância do gráfico anterior se ela existir
+  if (window.myChart instanceof Chart) {
+    window.myChart.destroy();
+  }
+
+  window.myChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: labels,
@@ -208,9 +228,15 @@ function restartQuiz() {
 }
 
 function toggleHistory() {
-  document.getElementById("history-container").classList.toggle("hidden");
+  const historyContainer = document.getElementById("history-container");
+  const scoreChart = document.getElementById("scoreChart");
+  historyContainer.classList.toggle("hidden");
+  scoreChart.classList.add("hidden"); // Garante que o gráfico não aparece junto
 }
 
 function toggleChart() {
-  document.getElementById("scoreChart").classList.toggle("hidden");
+  const scoreChart = document.getElementById("scoreChart");
+  const historyContainer = document.getElementById("history-container");
+  scoreChart.classList.toggle("hidden");
+  historyContainer.classList.add("hidden"); // Garante que o histórico não aparece junto
 }
