@@ -1,6 +1,6 @@
 :root {
-  --primary-color: rgb( 150, 67, 150);
-  --secondary-color: #007BFF;
+  --primary-color: #964396; /* Roxo vibrante */
+  --secondary-color: #007BFF; /* Azul para botões de ação */
   --bg-color: #f4f7f6;
   --container-bg-color: #fff;
   --text-color: #333;
@@ -14,7 +14,7 @@ body.dark-mode {
   --container-bg-color: #2c2c2c;
   --text-color: #e0e0e0;
   --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --primary-color: #66bb6a;
+  --primary-color: #BB86FC; /* Roxo mais claro para o modo escuro */
   --secondary-color: #42a5f5;
 }
 
@@ -55,15 +55,7 @@ header {
   align-items: center;
 }
 
-h1 {🔄 Reiniciar ￼📁 Exportar CSV ￼📜 Ver Histórico ￼📊 Ver Gráfico
-Histórico de Pontuação:
-08/08/2025, 15:38:59 - ciencias - 1/1
-08/08/2025, 15:48:56 - matematica - 2/2
-08/08/2025, 17:08:49 - matematica - 2/2
-08/08/2025, 17:20:57 - ciencias - 0/1
-08/08/2025, 17:21:15 - linguagens - 1/1
-08/08/2025, 17:30:02 - matematica - 1/2
-08/08/2025, 17:33:19 - ciencias - 0/1
+h1 {
   font-size: 32px;
   color: var(--primary-color);
 }
@@ -86,11 +78,11 @@ main, aside, #welcome-screen {
   padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
-  text-align: center;
 }
 
 #welcome-screen {
   grid-column: 1 / -1;
+  text-align: center;
 }
 
 #welcome-screen h2 {
@@ -209,15 +201,7 @@ body.dark-mode #answers-container button:hover:not(:disabled) {
 
 .hidden {
   display: none;
-}🔄 Reiniciar ￼📁 Exportar CSV ￼📜 Ver Histórico ￼📊 Ver Gráfico
-Histórico de Pontuação:
-08/08/2025, 15:38:59 - ciencias - 1/1
-08/08/2025, 15:48:56 - matematica - 2/2
-08/08/2025, 17:08:49 - matematica - 2/2
-08/08/2025, 17:20:57 - ciencias - 0/1
-08/08/2025, 17:21:15 - linguagens - 1/1
-08/08/2025, 17:30:02 - matematica - 1/2
-08/08/2025, 17:33:19 - ciencias - 0/1
+}
 
 #explanation-text {
   margin-top: 15px;
@@ -227,15 +211,7 @@ Histórico de Pontuação:
   padding: 15px;
   border-radius: 8px;
   text-align: left;
-}🔄 Reiniciar ￼📁 Exportar CSV ￼📜 Ver Histórico ￼📊 Ver Gráfico
-Histórico de Pontuação:
-08/08/2025, 15:38:59 - ciencias - 1/1
-08/08/2025, 15:48:56 - matematica - 2/2
-08/08/2025, 17:08:49 - matematica - 2/2
-08/08/2025, 17:20:57 - ciencias - 0/1
-08/08/2025, 17:21:15 - linguagens - 1/1
-08/08/2025, 17:30:02 - matematica - 1/2
-08/08/2025, 17:33:19 - ciencias - 0/1
+}
 
 body.dark-mode #explanation-text {
   background-color: #3b3b3b;
@@ -258,15 +234,7 @@ body.dark-mode #explanation-text {
   background-color: #0056b3;
 }
 
-#final-score {🔄 Reiniciar ￼📁 Exportar CSV ￼📜 Ver Histórico ￼📊 Ver Gráfico
-Histórico de Pontuação:
-08/08/2025, 15:38:59 - ciencias - 1/1
-08/08/2025, 15:48:56 - matematica - 2/2
-08/08/2025, 17:08:49 - matematica - 2/2
-08/08/2025, 17:20:57 - ciencias - 0/1
-08/08/2025, 17:21:15 - linguagens - 1/1
-08/08/2025, 17:30:02 - matematica - 1/2
-08/08/2025, 17:33:19 - ciencias - 0/1
+#final-score {
   margin: 15px 0;
   font-size: 20px;
   font-weight: 600;
@@ -274,15 +242,7 @@ Histórico de Pontuação:
 
 .controls {
   display: flex;
-  flex-direction: column;🔄 Reiniciar ￼📁 Exportar CSV ￼📜 Ver Histórico ￼📊 Ver Gráfico
-Histórico de Pontuação:
-08/08/2025, 15:38:59 - ciencias - 1/1
-08/08/2025, 15:48:56 - matematica - 2/2
-08/08/2025, 17:08:49 - matematica - 2/2
-08/08/2025, 17:20:57 - ciencias - 0/1
-08/08/2025, 17:21:15 - linguagens - 1/1
-08/08/2025, 17:30:02 - matematica - 1/2
-08/08/2025, 17:33:19 - ciencias - 0/1
+  flex-direction: column;
   gap: 10px;
   margin-top: 20px;
 }
