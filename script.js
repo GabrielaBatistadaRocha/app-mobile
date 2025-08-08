@@ -54,6 +54,7 @@ function startQuiz() {
   document.getElementById("quiz-container").classList.remove("hidden");
   document.getElementById("result-container").classList.add("hidden");
   document.getElementById("history-container").classList.add("hidden");
+  document.getElementById("scoreChart").classList.add("hidden");
 
   displayQuestion();
 }
@@ -100,7 +101,6 @@ function checkAnswer(buttonClicked, answer) {
 
 function nextQuestion() {
   currentQuestionIndex++;
-
   if (currentQuestionIndex < selectedQuestions.length) {
     displayQuestion();
   } else {
@@ -118,8 +118,6 @@ function showFinalScore() {
 
   saveScore(subject, score, total, timestamp);
   loadHistory();
-
-  document.getElementById("history-container").classList.remove("hidden");
 
   let message = "";
   if (score === total) {
@@ -162,7 +160,6 @@ function loadHistory() {
 
 function renderChart(history) {
   const ctx = document.getElementById("scoreChart").getContext("2d");
-
   const labels = history.map(entry => entry.timestamp);
   const data = history.map(entry => (entry.score / entry.total) * 100);
 
@@ -208,4 +205,12 @@ function exportCSV() {
 
 function restartQuiz() {
   startQuiz();
+}
+
+function toggleHistory() {
+  document.getElementById("history-container").classList.toggle("hidden");
+}
+
+function toggleChart() {
+  document.getElementById("scoreChart").classList.toggle("hidden");
 }

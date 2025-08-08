@@ -3,47 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz ENEM</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Quiz Interativo</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎓 Quiz ENEM</h1>
-      <div class="controls">
-        <select id="subject-select" onchange="startQuiz()">
-          <option value="">-- Selecione a matéria --</option>
+      <h1>Quiz Interativo</h1>
+      <div id="subject-selector">
+        <select id="subject-select">
+          <option value="">Selecione um assunto</option>
           <option value="matematica">Matemática</option>
-          <option value="ciencias">Ciências da Natureza</option>
-          <option value="humanas">Ciências Humanas</option>
-          <option value="linguagens">Linguagens e Códigos</option>
+          <option value="ciencias">Ciências</option>
+          <option value="humanas">Humanas</option>
+          <option value="linguagens">Linguagens</option>
         </select>
-        <div class="buttons">
-          <button onclick="toggleHistory()">📜 Histórico</button>
-          <button onclick="showGraph()">📊 Gráfico</button>
-        </div>
+        <button onclick="startQuiz()">Iniciar</button>
       </div>
     </header>
 
-    <main>
-      <section id="quiz-container" class="hidden">
-        <p id="question-text"></p>
-        <div id="answers-container"></div>
-        <p id="explanation-text" class="hidden"></p>
-        <button id="next-button" onclick="nextQuestion()" class="hidden">Próxima Pergunta</button>
-      </section>
-
-      <section id="result-container" class="hidden">
-        <h2>✅ Quiz Finalizado!</h2>
-        <p id="final-score"></p>
-        <button onclick="restartQuiz()">🔄 Jogar Novamente</button>
-      </section>
+    <main id="quiz-container" class="hidden">
+      <div id="question-text"></div>
+      <div id="answers-container"></div>
+      <div id="explanation-text" class="hidden"></div>
+      <button id="next-button" class="hidden" onclick="nextQuestion()">Próxima</button>
     </main>
 
-    <aside id="history-panel" class="hidden">
-      <h3>📜 Histórico de Respostas</h3>
-      <div id="history-container"></div>
-      <canvas id="scoreChart" class="hidden" width="400" height="200"></canvas>
+    <aside>
+      <div id="result-container" class="hidden">
+        <div id="final-score"></div>
+        <div class="controls">
+          <button onclick="restartQuiz()">🔄 Reiniciar</button>
+          <button onclick="exportCSV()">📁 Exportar CSV</button>
+          <button onclick="toggleHistory()">📜 Ver Histórico</button>
+          <button onclick="toggleChart()">📊 Ver Gráfico</button>
+        </div>
+      </div>
+      <div id="history-container" class="hidden"></div>
+      <canvas id="scoreChart" class="hidden"></canvas>
     </aside>
   </div>
 
