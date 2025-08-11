@@ -344,7 +344,7 @@ aside {
 }
 
 #quiz-result-chart, #scoreChart {
-  max-width: 90%;
+  max-width: 50%;
   height: auto; /* Mantém a proporção */
   margin-top: 20px;
 }
