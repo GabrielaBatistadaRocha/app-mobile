@@ -115,6 +115,7 @@ const restartButton = document.getElementById("restart-button");
 const exportCsvButton = document.getElementById("export-csv-button");
 const toggleHistoryButton = document.getElementById("toggle-history-button");
 const toggleChartButton = document.getElementById("toggle-chart-button");
+const toggleQuizChartButton = document.getElementById("toggle-quiz-chart-button");
 const backToHomeFromReview = document.getElementById("back-to-home-from-review");
 const backToHomeFromHistory = document.getElementById("back-to-home-from-history");
 
@@ -148,6 +149,7 @@ function setupEventListeners() {
   exportCsvButton.addEventListener('click', exportCSV);
   toggleHistoryButton.addEventListener('click', toggleHistory);
   toggleChartButton.addEventListener('click', toggleChart);
+  toggleQuizChartButton.addEventListener('click', toggleQuizChart);
   
   if (backToHomeFromReview) backToHomeFromReview.addEventListener('click', restartQuiz);
   if (backToHomeFromHistory) backToHomeFromHistory.addEventListener('click', restartQuiz);
@@ -319,11 +321,9 @@ function showFinalScore() {
     reviewButton.classList.add("hidden");
   }
 
-  // A função renderQuizResultChart é chamada aqui!
   renderQuizResultChart();
 }
 
-// NOVO: Função para renderizar o gráfico do quiz atual
 function renderQuizResultChart() {
   if (window.quizResultChart instanceof Chart) {
     window.quizResultChart.destroy();
@@ -471,16 +471,23 @@ function restartQuiz() {
   quizState.userAnswers = [];
 }
 
+// NOVO: Função para alternar a exibição do gráfico do quiz
+function toggleQuizChart() {
+  historyContainer.classList.add("hidden");
+  scoreChartElement.classList.add("hidden");
+  quizResultChartElement.classList.toggle("hidden");
+}
+
 function toggleHistory() {
   historyContainer.classList.toggle("hidden");
   scoreChartElement.classList.add("hidden");
-  quizResultChartElement.classList.add("hidden"); // Esconder o gráfico do quiz atual
+  quizResultChartElement.classList.add("hidden");
   loadHistory();
 }
 
 function toggleChart() {
   scoreChartElement.classList.toggle("hidden");
   historyContainer.classList.add("hidden");
-  quizResultChartElement.classList.add("hidden"); // Esconder o gráfico do quiz atual
+  quizResultChartElement.classList.add("hidden");
   loadHistory();
 }
