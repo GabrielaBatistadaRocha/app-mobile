@@ -114,7 +114,8 @@ const restartButton = document.getElementById("restart-button");
 const exportCsvButton = document.getElementById("export-csv-button");
 const toggleHistoryButton = document.getElementById("toggle-history-button");
 const toggleChartButton = document.getElementById("toggle-chart-button");
-const backToHomeButtons = document.querySelectorAll(".back-to-home");
+const backToHomeFromReview = document.getElementById("back-to-home-from-review");
+const backToHomeFromHistory = document.getElementById("back-to-home-from-history");
 
 // Gerenciamento de Estado - Centralizado em um objeto
 const quizState = {
@@ -146,7 +147,8 @@ function setupEventListeners() {
   exportCsvButton.addEventListener('click', exportCSV);
   toggleHistoryButton.addEventListener('click', toggleHistory);
   toggleChartButton.addEventListener('click', toggleChart);
-  backToHomeButtons.forEach(button => button.addEventListener('click', restartQuiz));
+  backToHomeFromReview.addEventListener('click', restartQuiz);
+  backToHomeFromHistory.addEventListener('click', restartQuiz);
 }
 
 function toggleDarkMode() {
