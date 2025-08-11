@@ -199,9 +199,11 @@ function startQuiz(mode) {
   [resultContainer, historyContainer, scoreChartElement, reviewContainer, aside, quizResultChartElement].forEach(el => el.classList.add("hidden"));
   main.classList.add("full-width");
 
+  // Inicia o timer e configura o comportamento do botão "Próxima"
   if (quizState.isSimuladoMode) {
-    timerFill.style.backgroundColor = '#FFC107';
-    nextButton.classList.add("hidden");
+    timerFill.style.backgroundColor = 'var(--secondary-color)';
+    nextButton.classList.remove("hidden");
+    startTimer(3 * 60); // 3 minutos para o simulado
   } else {
     timerFill.style.backgroundColor = 'var(--accent-color)';
   }
@@ -225,15 +227,21 @@ function displayQuestion() {
   });
 
   explanationText.classList.add("hidden");
-  nextButton.classList.add("hidden");
 
-  startTimer(quizState.isSimuladoMode ? 180 : 15);
+  // Lógica do timer para o modo normal
+  if (!quizState.isSimuladoMode) {
+    nextButton.classList.add("hidden");
+    startTimer(15); // 15 segundos para cada pergunta no modo normal
+  }
 }
 
 function startTimer(duration) {
   let timeLeft = duration;
-  timerFill.style.width = '100%';
-
+  // Apenas reinicia a largura da barra se o quiz for no modo normal, pois no simulado o timer é único.
+  if (!quizState.isSimuladoMode) {
+    timerFill.style.width = '100%';
+  }
+  
   clearInterval(quizState.timerInterval);
   quizState.timerInterval = setInterval(() => {
     timeLeft--;
@@ -242,26 +250,23 @@ function startTimer(duration) {
 
     if (timeLeft <= 0) {
       clearInterval(quizState.timerInterval);
-      checkAnswer(null, 'timeout');
+      if (quizState.isSimuladoMode) {
+        showFinalScore();
+      } else {
+        checkAnswer(null, 'timeout');
+      }
     }
   }, 1000);
 }
 
 function checkAnswer(buttonClicked, answer) {
-  clearInterval(quizState.timerInterval);
   const currentQuestion = quizState.selectedQuestions[quizState.currentQuestionIndex];
   const buttons = document.querySelectorAll("#answers-container button");
   const isCorrect = answer === currentQuestion.correctAnswer;
 
-  quizState.userAnswers.push({
-    question: currentQuestion.question,
-    userAnswer: answer,
-    correctAnswer: currentQuestion.correctAnswer,
-    explanation: currentQuestion.explanation,
-    isCorrect: isCorrect
-  });
-
+  // Lógica para o modo normal
   if (!quizState.isSimuladoMode) {
+    clearInterval(quizState.timerInterval);
     buttons.forEach(btn => {
       btn.disabled = true;
       if (btn.textContent === currentQuestion.correctAnswer) {
@@ -277,9 +282,21 @@ function checkAnswer(buttonClicked, answer) {
 
     explanationText.textContent = currentQuestion.explanation;
     explanationText.classList.remove("hidden");
+    nextButton.classList.remove("hidden");
   }
 
-  nextButton.classList.remove("hidden");
+  // Lógica para o modo simulado
+  else {
+    buttons.forEach(btn => btn.disabled = true);
+  }
+
+  quizState.userAnswers.push({
+    question: currentQuestion.question,
+    userAnswer: answer,
+    correctAnswer: currentQuestion.correctAnswer,
+    explanation: currentQuestion.explanation,
+    isCorrect: isCorrect
+  });
 }
 
 function nextQuestion() {
@@ -287,12 +304,13 @@ function nextQuestion() {
   if (quizState.currentQuestionIndex < quizState.selectedQuestions.length) {
     displayQuestion();
   } else {
+    clearInterval(quizState.timerInterval);
     showFinalScore();
   }
 }
 
 function showFinalScore() {
-  [quizContainer, historyContainer, scoreChartElement, reviewContainer].forEach(el => el.classList.add("hidden"));
+  [quizContainer, historyContainer, scoreChartElement, reviewContainer, quizResultChartElement].forEach(el => el.classList.add("hidden"));
   resultContainer.classList.remove("hidden");
   aside.classList.remove("hidden");
   main.classList.remove("full-width");
@@ -302,7 +320,6 @@ function showFinalScore() {
   const timestamp = new Date().toLocaleString();
 
   saveScore(quizState.currentSubject, finalScore, total, timestamp);
-  loadHistory();
 
   let message = "";
   if (finalScore === total) {
@@ -322,6 +339,7 @@ function showFinalScore() {
   }
 
   renderQuizResultChart();
+  toggleQuizChart();
 }
 
 function renderQuizResultChart() {
@@ -333,7 +351,6 @@ function renderQuizResultChart() {
   const incorrectAnswers = quizState.userAnswers.length - correctAnswers;
 
   const ctx = quizResultChartElement.getContext("2d");
-  quizResultChartElement.classList.remove("hidden");
   
   window.quizResultChart = new Chart(ctx, {
     type: 'doughnut',
@@ -471,11 +488,12 @@ function restartQuiz() {
   quizState.userAnswers = [];
 }
 
-// NOVO: Função para alternar a exibição do gráfico do quiz
+// Função para alternar a exibição do gráfico do quiz atual
 function toggleQuizChart() {
+  quizResultChartElement.classList.toggle("hidden");
+  // Oculta os outros gráficos e histórico para evitar sobreposição
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
-  quizResultChartElement.classList.toggle("hidden");
 }
 
 function toggleHistory() {
