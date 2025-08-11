@@ -23,22 +23,28 @@
     <div id="welcome-screen">
       <h2>Escolha uma matéria para começar</h2>
       <div id="subject-cards">
-        <button class="subject-card" onclick="startQuiz('matematica')">
+        <button class="subject-card" onclick="startQuiz('matematica', 'normal')">
           <i class="fa-solid fa-calculator"></i>
           <span>Matemática</span>
         </button>
-        <button class="subject-card" onclick="startQuiz('ciencias')">
+        <button class="subject-card" onclick="startQuiz('ciencias', 'normal')">
           <i class="fa-solid fa-flask"></i>
           <span>Ciências</span>
         </button>
-        <button class="subject-card" onclick="startQuiz('humanas')">
+        <button class="subject-card" onclick="startQuiz('humanas', 'normal')">
           <i class="fa-solid fa-users"></i>
           <span>Humanas</span>
         </button>
-        <button class="subject-card" onclick="startQuiz('linguagens')">
+        <button class="subject-card" onclick="startQuiz('linguagens', 'normal')">
           <i class="fa-solid fa-book-open"></i>
           <span>Linguagens</span>
         </button>
+      </div>
+      <!-- Novo: Botões para escolher o modo, que aparecerão quando uma matéria for selecionada -->
+      <div id="mode-selection" class="hidden">
+        <h3>Selecione um modo de jogo</h3>
+        <button class="mode-button" onclick="startQuiz(currentSubject, 'normal')">Normal</button>
+        <button class="mode-button" onclick="startQuiz(currentSubject, 'simulado')">Simulado</button>
       </div>
     </div>
 
@@ -56,12 +62,16 @@
       <div id="result-container" class="hidden">
         <div id="final-score"></div>
         <div class="controls">
+          <!-- Novo: Botão para revisar respostas, visível apenas no modo simulado -->
+          <button id="review-button" class="hidden" onclick="displayReviewScreen()">🔍 Revisar Respostas</button>
           <button onclick="restartQuiz()">🔄 Reiniciar</button>
           <button onclick="exportCSV()">📁 Exportar CSV</button>
           <button onclick="toggleHistory()">📜 Ver Histórico</button>
           <button onclick="toggleChart()">📊 Ver Gráfico</button>
         </div>
       </div>
+      <!-- Novo: Container para a tela de revisão -->
+      <div id="review-container" class="hidden"></div>
       <div id="history-container" class="hidden"></div>
       <canvas id="scoreChart" class="hidden"></canvas>
     </aside>
