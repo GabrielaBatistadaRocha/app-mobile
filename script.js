@@ -166,6 +166,7 @@ function selectSubject(event) {
 }
 
 function selectMode(event) {
+  // Passa o nome da matéria para o startQuiz
   startQuiz(event.currentTarget.dataset.mode);
 }
 
@@ -179,7 +180,6 @@ function shuffleArray(array) {
 
 function startQuiz(mode) {
   if (!quizState.currentSubject) {
-    // Adiciona uma verificação para evitar o erro, caso o usuário não tenha selecionado a matéria
     console.error("Nenhuma matéria selecionada.");
     return;
   }
