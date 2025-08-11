@@ -107,6 +107,7 @@ const resultContainer = document.getElementById("result-container");
 const reviewContainer = document.getElementById("review-container");
 const historyContainer = document.getElementById("history-container");
 const scoreChartElement = document.getElementById("scoreChart");
+const quizResultChartElement = document.getElementById("quiz-result-chart");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const finalScoreDisplay = document.getElementById("final-score");
 const reviewButton = document.getElementById("review-button");
@@ -148,7 +149,6 @@ function setupEventListeners() {
   toggleHistoryButton.addEventListener('click', toggleHistory);
   toggleChartButton.addEventListener('click', toggleChart);
   
-  // Agora adicionamos os listeners para os botões de voltar aqui, já que eles existem no HTML
   if (backToHomeFromReview) backToHomeFromReview.addEventListener('click', restartQuiz);
   if (backToHomeFromHistory) backToHomeFromHistory.addEventListener('click', restartQuiz);
 }
@@ -166,7 +166,6 @@ function selectSubject(event) {
 }
 
 function selectMode(event) {
-  // Passa o nome da matéria para o startQuiz
   startQuiz(event.currentTarget.dataset.mode);
 }
 
@@ -319,6 +318,45 @@ function showFinalScore() {
   } else {
     reviewButton.classList.add("hidden");
   }
+
+  // Chamar a função para renderizar o gráfico do quiz atual
+  renderQuizResultChart();
+}
+
+function renderQuizResultChart() {
+  if (window.quizResultChart instanceof Chart) {
+    window.quizResultChart.destroy();
+  }
+
+  const correctAnswers = quizState.userAnswers.filter(answer => answer.isCorrect).length;
+  const incorrectAnswers = quizState.userAnswers.length - correctAnswers;
+
+  const ctx = quizResultChartElement.getContext("2d");
+  quizResultChartElement.classList.remove("hidden");
+  
+  window.quizResultChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Corretas', 'Incorretas'],
+      datasets: [{
+        data: [correctAnswers, incorrectAnswers],
+        backgroundColor: ['#4CAF50', '#F44336'],
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Seu Desempenho Neste Quiz'
+        }
+      }
+    }
+  });
 }
 
 function displayReviewScreen() {
