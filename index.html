@@ -16,35 +16,34 @@
     <header>
       <div class="header-content">
         <h1>Quiz Interativo</h1>
-        <button id="dark-mode-toggle" title="Alternar modo escuro"><i class="fa-solid fa-moon"></i></button>
+        <button id="dark-mode-toggle" title="Alternar modo escuro" aria-label="Alternar modo escuro"><i class="fa-solid fa-moon"></i></button>
       </div>
     </header>
 
     <div id="welcome-screen">
       <h2>Escolha uma matéria para começar</h2>
-      <div id="subject-cards">
-        <button class="subject-card" onclick="startQuiz('matematica', 'normal')">
+      <ul id="subject-cards">
+        <li class="subject-card" data-subject="matematica">
           <i class="fa-solid fa-calculator"></i>
           <span>Matemática</span>
-        </button>
-        <button class="subject-card" onclick="startQuiz('ciencias', 'normal')">
+        </li>
+        <li class="subject-card" data-subject="ciencias">
           <i class="fa-solid fa-flask"></i>
           <span>Ciências</span>
-        </button>
-        <button class="subject-card" onclick="startQuiz('humanas', 'normal')">
+        </li>
+        <li class="subject-card" data-subject="humanas">
           <i class="fa-solid fa-users"></i>
           <span>Humanas</span>
-        </button>
-        <button class="subject-card" onclick="startQuiz('linguagens', 'normal')">
+        </li>
+        <li class="subject-card" data-subject="linguagens">
           <i class="fa-solid fa-book-open"></i>
           <span>Linguagens</span>
-        </button>
-      </div>
-      <!-- Novo: Botões para escolher o modo, que aparecerão quando uma matéria for selecionada -->
+        </li>
+      </ul>
       <div id="mode-selection" class="hidden">
         <h3>Selecione um modo de jogo</h3>
-        <button class="mode-button" onclick="startQuiz(currentSubject, 'normal')">Normal</button>
-        <button class="mode-button" onclick="startQuiz(currentSubject, 'simulado')">Simulado</button>
+        <button class="mode-button" data-mode="normal">Normal</button>
+        <button class="mode-button" data-mode="simulado">Simulado</button>
       </div>
     </div>
 
@@ -55,29 +54,25 @@
       <div id="question-text"></div>
       <div id="answers-container"></div>
       <div id="explanation-text" class="hidden"></div>
-      <button id="next-button" class="hidden" onclick="nextQuestion()">Próxima</button>
+      <button id="next-button" class="hidden">Próxima</button>
     </main>
 
    <aside id="aside-container" class="hidden">
       <div id="result-container" class="hidden">
         <div id="final-score"></div>
         <div class="controls">
-          <!-- Novo: Botão para revisar respostas, visível apenas no modo simulado -->
-          <button id="review-button" class="hidden" onclick="displayReviewScreen()">🔍 Revisar Respostas</button>
-          <button onclick="restartQuiz()">🔄 Reiniciar</button>
-          <button onclick="exportCSV()">📁 Exportar CSV</button>
-          <button onclick="toggleHistory()">📜 Ver Histórico</button>
-          <button onclick="toggleChart()">📊 Ver Gráfico</button>
+          <button id="review-button" class="hidden">🔍 Revisar Respostas</button>
+          <button id="restart-button">🔄 Reiniciar</button>
+          <button id="export-csv-button">📁 Exportar CSV</button>
+          <button id="toggle-history-button">📜 Ver Histórico</button>
+          <button id="toggle-chart-button">📊 Ver Gráfico</button>
         </div>
       </div>
-      <!-- Novo: Container para a tela de revisão -->
       <div id="review-container" class="hidden">
-         <!-- Novo: Botão para voltar à tela inicial -->
-         <button onclick="restartQuiz()" class="back-to-home">Voltar ao Início</button>
+         <button id="back-to-home-from-review" class="back-to-home">Voltar ao Início</button>
       </div>
       <div id="history-container" class="hidden">
-         <!-- Novo: Botão para voltar à tela inicial -->
-         <button onclick="restartQuiz()" class="back-to-home">Voltar ao Início</button>
+         <button id="back-to-home-from-history" class="back-to-home">Voltar ao Início</button>
       </div>
       <canvas id="scoreChart" class="hidden"></canvas>
     </aside>
