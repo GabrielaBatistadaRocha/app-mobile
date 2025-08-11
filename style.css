@@ -44,6 +44,11 @@ body {
   width: 100%;
 }
 
+/* New CSS to handle the main content being full width or side-by-side */
+main.full-width {
+  grid-column: 1 / -1;
+}
+
 header {
   grid-column: 1 / -1;
   margin-bottom: 20px;
