@@ -95,63 +95,24 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
 let currentSubject = "";
-let isSimuladoMode = false;
-let userAnswers = [];
+let isSimuladoMode = false; // Novo: Variável para controlar o modo de quiz
+let userAnswers = []; // Novo: Array para armazenar as respostas do usuário
 
-// Melhoria: Armazenando referências DOM para evitar repetições
 const welcomeScreen = document.getElementById("welcome-screen");
-const subjectCards = document.querySelectorAll(".subject-card");
-const modeSelection = document.getElementById("mode-selection");
-const modeButtons = document.querySelectorAll(".mode-button");
 const quizContainer = document.getElementById("quiz-container");
-const questionText = document.getElementById("question-text");
-const answersContainer = document.getElementById("answers-container");
-const explanationText = document.getElementById("explanation-text");
-const nextButton = document.getElementById("next-button");
-const timerFill = document.getElementById("timer-fill");
-const aside = document.getElementById("aside-container");
-const main = document.querySelector("main");
 const resultContainer = document.getElementById("result-container");
-const reviewContainer = document.getElementById("review-container");
+const reviewContainer = document.getElementById("review-container"); // Novo: Container para a revisão
 const historyContainer = document.getElementById("history-container");
 const scoreChartElement = document.getElementById("scoreChart");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
-const finalScoreDisplay = document.getElementById("final-score");
-const reviewButton = document.getElementById("review-button");
-const restartButton = document.getElementById("restart-button");
-const exportCsvButton = document.getElementById("export-csv-button");
-const toggleHistoryButton = document.getElementById("toggle-history-button");
-const toggleChartButton = document.getElementById("toggle-chart-button");
-const backToHomeButtons = document.querySelectorAll(".back-to-home");
+const aside = document.getElementById("aside-container");
+const main = document.querySelector("main");
 
-// Melhoria: Adicionando event listeners para melhor separação de responsabilidades
 darkModeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   const isDarkMode = document.body.classList.contains('dark-mode');
   localStorage.setItem('dark-mode', isDarkMode);
 });
-
-subjectCards.forEach(card => {
-  card.addEventListener('click', () => {
-    currentSubject = card.dataset.subject;
-    welcomeScreen.classList.add("hidden");
-    modeSelection.classList.remove("hidden");
-  });
-});
-
-modeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    startQuiz(currentSubject, button.dataset.mode);
-  });
-});
-
-nextButton.addEventListener('click', nextQuestion);
-reviewButton.addEventListener('click', displayReviewScreen);
-restartButton.addEventListener('click', restartQuiz);
-exportCsvButton.addEventListener('click', exportCSV);
-toggleHistoryButton.addEventListener('click', toggleHistory);
-toggleChartButton.addEventListener('click', toggleChart);
-backToHomeButtons.forEach(button => button.addEventListener('click', restartQuiz));
 
 if (localStorage.getItem('dark-mode') === 'true') {
   document.body.classList.add('dark-mode');
@@ -167,28 +128,31 @@ function shuffleArray(array) {
 function startQuiz(subject, mode) {
   if (!subject) return;
 
-  isSimuladoMode = mode === 'simulado';
+  isSimuladoMode = mode === 'simulado'; // Define o modo do quiz
   currentSubject = subject;
   selectedQuestions = [...questionBank[subject]];
   shuffleArray(selectedQuestions);
   currentQuestionIndex = 0;
   score = 0;
-  userAnswers = [];
+  userAnswers = []; // Limpa o histórico de respostas
 
   welcomeScreen.classList.add("hidden");
   quizContainer.classList.remove("hidden");
   resultContainer.classList.add("hidden");
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
-  reviewContainer.classList.add("hidden");
+  reviewContainer.classList.add("hidden"); // Oculta a tela de revisão
   aside.classList.add("hidden");
   main.classList.add("full-width");
 
+  // Ajusta a interface para o modo simulado
   if (isSimuladoMode) {
-    timerFill.style.backgroundColor = '#FFC107';
-    nextButton.classList.add("hidden");
+    document.getElementById("timer-fill").style.backgroundColor = '#FFC107'; // Cor de alerta
+    document.getElementById("next-button").textContent = 'Próxima Questão';
+    document.getElementById("next-button").classList.add("hidden");
   } else {
-    timerFill.style.backgroundColor = 'var(--accent-color)';
+    document.getElementById("timer-fill").style.backgroundColor = 'var(--secondary-color)';
+    document.getElementById("next-button").textContent = 'Próxima Questão';
   }
 
   displayQuestion();
@@ -196,7 +160,9 @@ function startQuiz(subject, mode) {
 
 function displayQuestion() {
   const currentQuestion = selectedQuestions[currentQuestionIndex];
-  questionText.textContent = `(${currentQuestionIndex + 1}/${selectedQuestions.length}) ${currentQuestion.question}`;
+  document.getElementById("question-text").textContent = `(${currentQuestionIndex + 1}/${selectedQuestions.length}) ${currentQuestion.question}`;
+
+  const answersContainer = document.getElementById("answers-container");
   answersContainer.innerHTML = "";
 
   const shuffledAnswers = [...currentQuestion.answers];
@@ -205,18 +171,20 @@ function displayQuestion() {
   shuffledAnswers.forEach(answer => {
     const button = document.createElement("button");
     button.textContent = answer;
-    button.addEventListener('click', () => checkAnswer(button, answer));
+    button.onclick = () => checkAnswer(button, answer);
     answersContainer.appendChild(button);
   });
 
-  explanationText.classList.add("hidden");
-  nextButton.classList.add("hidden");
+  document.getElementById("next-button").classList.add("hidden");
+  document.getElementById("explanation-text").classList.add("hidden");
 
+  // Inicia o timer, com 3 minutos para o modo simulado
   startTimer(isSimuladoMode ? 180 : 15);
 }
 
 function startTimer(duration) {
   let timeLeft = duration;
+  const timerFill = document.getElementById("timer-fill");
   timerFill.style.width = '100%';
 
   clearInterval(timerInterval);
@@ -236,37 +204,38 @@ function checkAnswer(buttonClicked, answer) {
   clearInterval(timerInterval);
   const currentQuestion = selectedQuestions[currentQuestionIndex];
   const buttons = document.querySelectorAll("#answers-container button");
-  const isCorrect = answer === currentQuestion.correctAnswer;
 
-  // Melhoria: Salva a resposta do usuário, inclusive no modo simulado
+  // Salva a resposta do usuário
   userAnswers.push({
     question: currentQuestion.question,
     userAnswer: answer,
     correctAnswer: currentQuestion.correctAnswer,
     explanation: currentQuestion.explanation,
-    isCorrect: isCorrect
+    isCorrect: answer === currentQuestion.correctAnswer
   });
 
-  if (!isSimuladoMode) {
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === currentQuestion.correctAnswer) {
-        btn.classList.add("correct");
-      } else if (btn === buttonClicked) {
-        btn.classList.add("incorrect");
-      }
-    });
-
-    if (isCorrect) {
-      score++;
-    }
-
-    explanationText.textContent = currentQuestion.explanation;
-    explanationText.classList.remove("hidden");
+  if (isSimuladoMode) {
+    buttons.forEach(btn => btn.disabled = true);
+    document.getElementById("next-button").classList.remove("hidden");
+    return; // Não mostra feedback visual no modo simulado
   }
 
-  // No modo normal, mostra o botão "Próxima". No simulado, mostra apenas no final.
-  nextButton.classList.remove("hidden");
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === currentQuestion.correctAnswer) {
+      btn.classList.add("correct");
+    } else if (btn === buttonClicked) {
+      btn.classList.add("incorrect");
+    }
+  });
+
+  if (answer === currentQuestion.correctAnswer) {
+    score++;
+  }
+
+  document.getElementById("explanation-text").textContent = currentQuestion.explanation;
+  document.getElementById("explanation-text").classList.remove("hidden");
+  document.getElementById("next-button").classList.remove("hidden");
 }
 
 function nextQuestion() {
@@ -288,42 +257,36 @@ function showFinalScore() {
   aside.classList.remove("hidden");
   main.classList.remove("full-width");
 
-  // Melhoria: Cálculo de pontuação correto para o modo simulado
-  const finalScore = userAnswers.filter(ans => ans.isCorrect).length;
+  if (isSimuladoMode) {
+    // Calcula a pontuação total do modo simulado
+    score = userAnswers.filter(ans => ans.isCorrect).length;
+    document.getElementById("review-button").classList.remove("hidden");
+  } else {
+    document.getElementById("review-button").classList.add("hidden");
+  }
+
   const total = selectedQuestions.length;
   const timestamp = new Date().toLocaleString();
 
-  saveScore(currentSubject, finalScore, total, timestamp);
+  saveScore(currentSubject, score, total, timestamp);
   loadHistory();
 
   let message = "";
-  if (finalScore === total) {
+  if (score === total) {
     message = "Parabéns! Você acertou todas!";
-  } else if (finalScore > 0) {
+  } else if (score > 0) {
     message = "Bom trabalho! Mas ainda dá para melhorar.";
   } else {
     message = "Ops! Nenhuma resposta correta. Tente novamente!";
   }
 
-  finalScoreDisplay.textContent = `${message} Sua pontuação final: ${finalScore} de ${total}`;
-
-  if (isSimuladoMode) {
-    reviewButton.classList.remove("hidden");
-  } else {
-    reviewButton.classList.add("hidden");
-  }
+  document.getElementById("final-score").textContent = `${message} Sua pontuação final: ${score} de ${total}`;
 }
 
 function displayReviewScreen() {
   resultContainer.classList.add("hidden");
   reviewContainer.classList.remove("hidden");
   reviewContainer.innerHTML = "<h3>Revisão do Quiz</h3>";
-
-  const backToHomeButton = document.createElement('button');
-  backToHomeButton.textContent = "Voltar ao Início";
-  backToHomeButton.classList.add("back-to-home");
-  backToHomeButton.addEventListener('click', restartQuiz);
-  reviewContainer.appendChild(backToHomeButton);
 
   userAnswers.forEach((answer, index) => {
     const questionDiv = document.createElement("div");
@@ -334,7 +297,7 @@ function displayReviewScreen() {
       <p>Resposta correta: ${answer.correctAnswer}</p>
       <p>Explicação: ${answer.explanation}</p>
     `;
-    questionDiv.style.backgroundColor = answer.isCorrect ? 'var(--review-correct-bg)' : 'var(--review-incorrect-bg)';
+    questionDiv.style.backgroundColor = answer.isCorrect ? '#d4edda' : '#f8d7da';
     questionDiv.style.padding = '15px';
     questionDiv.style.borderRadius = '8px';
     questionDiv.style.marginBottom = '10px';
@@ -343,34 +306,34 @@ function displayReviewScreen() {
 }
 
 function saveScore(subject, score, total, timestamp) {
-  const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
-  quizHistory.push({ subject, score, total, timestamp });
-  localStorage.setItem("quizHistory", JSON.stringify(quizHistory));
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+  history.push({ subject, score, total, timestamp });
+  localStorage.setItem("quizHistory", JSON.stringify(history));
 }
 
 function loadHistory() {
-  const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
   historyContainer.innerHTML = "<h3>Histórico de Pontuação:</h3>";
 
-  if (quizHistory.length === 0) {
+  if (history.length === 0) {
     historyContainer.innerHTML += "<p>Nenhum histórico disponível.</p>";
     return;
   }
 
   const list = document.createElement("ul");
-  quizHistory.forEach(entry => {
+  history.forEach(entry => {
     const item = document.createElement("li");
     item.textContent = `${entry.timestamp.split(' ')[0]} - ${entry.subject} - ${entry.score}/${entry.total}`;
     list.appendChild(item);
   });
 
   historyContainer.appendChild(list);
-  renderChart(quizHistory);
+  renderChart(history);
 }
 
 function renderChart(history) {
   const ctx = scoreChartElement.getContext("2d");
-  const labels = history.map(entry => entry.timestamp.split(',')[0]);
+  const labels = history.map(entry => entry.timestamp.split(' ')[0]);
   const data = history.map(entry => (entry.score / entry.total) * 100);
 
   if (window.myChart instanceof Chart) {
@@ -402,11 +365,11 @@ function renderChart(history) {
 }
 
 function exportCSV() {
-  const quizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
-  if (quizHistory.length === 0) return alert("Nenhum dado para exportar.");
+  const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+  if (history.length === 0) return alert("Nenhum dado para exportar.");
 
   let csv = "Data,Assunto,Pontuação,Total\n";
-  quizHistory.forEach(entry => {
+  history.forEach(entry => {
     csv += `${entry.timestamp},${entry.subject},${entry.score},${entry.total}\n`;
   });
 
@@ -426,7 +389,6 @@ function restartQuiz() {
   aside.classList.add("hidden");
   main.classList.add("full-width");
   welcomeScreen.classList.remove("hidden");
-  modeSelection.classList.add("hidden");
 }
 
 function toggleHistory() {
@@ -440,3 +402,8 @@ function toggleChart() {
   historyContainer.classList.add("hidden");
   loadHistory();
 }
+
+// Adiciona um evento para garantir que a matéria seja salva no histórico
+Object.keys(questionBank).forEach(subject => {
+  questionBank[subject].forEach(q => q.subject = subject);
+});
