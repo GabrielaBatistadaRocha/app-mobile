@@ -100,6 +100,7 @@ const questionText = document.getElementById("question-text");
 const answersContainer = document.getElementById("answers-container");
 const explanationText = document.getElementById("explanation-text");
 const nextButton = document.getElementById("next-button");
+const timerBar = document.getElementById("timer-bar");
 const timerFill = document.getElementById("timer-fill");
 const aside = document.getElementById("aside-container");
 const main = document.querySelector("main");
@@ -199,13 +200,14 @@ function startQuiz(mode) {
   [resultContainer, historyContainer, scoreChartElement, reviewContainer, aside, quizResultChartElement].forEach(el => el.classList.add("hidden"));
   main.classList.add("full-width");
 
-  // Inicia o timer e configura o comportamento do botão "Próxima"
+  // Configura a visibilidade do timer e o comportamento do botão "Próxima"
   if (quizState.isSimuladoMode) {
-    timerFill.style.backgroundColor = 'var(--secondary-color)';
+    timerBar.classList.remove("hidden");
     nextButton.classList.remove("hidden");
     startTimer(3 * 60); // 3 minutos para o simulado
   } else {
-    timerFill.style.backgroundColor = 'var(--accent-color)';
+    timerBar.classList.add("hidden");
+    nextButton.classList.add("hidden"); // O botão "Próxima" só aparece depois de responder no modo normal
   }
 
   displayQuestion();
@@ -227,20 +229,17 @@ function displayQuestion() {
   });
 
   explanationText.classList.add("hidden");
-
-  // Lógica do timer para o modo normal
+  
+  // No modo normal, o botão "Próxima" é escondido até a resposta ser verificada
   if (!quizState.isSimuladoMode) {
     nextButton.classList.add("hidden");
-    startTimer(15); // 15 segundos para cada pergunta no modo normal
   }
 }
 
 function startTimer(duration) {
   let timeLeft = duration;
-  // Apenas reinicia a largura da barra se o quiz for no modo normal, pois no simulado o timer é único.
-  if (!quizState.isSimuladoMode) {
-    timerFill.style.width = '100%';
-  }
+  timerFill.style.width = '100%';
+  timerFill.style.backgroundColor = 'var(--secondary-color)';
   
   clearInterval(quizState.timerInterval);
   quizState.timerInterval = setInterval(() => {
@@ -250,11 +249,7 @@ function startTimer(duration) {
 
     if (timeLeft <= 0) {
       clearInterval(quizState.timerInterval);
-      if (quizState.isSimuladoMode) {
-        showFinalScore();
-      } else {
-        checkAnswer(null, 'timeout');
-      }
+      showFinalScore();
     }
   }, 1000);
 }
@@ -264,30 +259,10 @@ function checkAnswer(buttonClicked, answer) {
   const buttons = document.querySelectorAll("#answers-container button");
   const isCorrect = answer === currentQuestion.correctAnswer;
 
-  // Lógica para o modo normal
-  if (!quizState.isSimuladoMode) {
-    clearInterval(quizState.timerInterval);
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === currentQuestion.correctAnswer) {
-        btn.classList.add("correct");
-      } else if (btn === buttonClicked) {
-        btn.classList.add("incorrect");
-      }
-    });
+  buttons.forEach(btn => btn.disabled = true);
 
-    if (isCorrect) {
-      quizState.score++;
-    }
-
-    explanationText.textContent = currentQuestion.explanation;
-    explanationText.classList.remove("hidden");
-    nextButton.classList.remove("hidden");
-  }
-
-  // Lógica para o modo simulado
-  else {
-    buttons.forEach(btn => btn.disabled = true);
+  if (isCorrect) {
+    quizState.score++;
   }
 
   quizState.userAnswers.push({
@@ -297,6 +272,21 @@ function checkAnswer(buttonClicked, answer) {
     explanation: currentQuestion.explanation,
     isCorrect: isCorrect
   });
+
+  // Lógica para o modo normal (sem timer)
+  if (!quizState.isSimuladoMode) {
+    buttons.forEach(btn => {
+      if (btn.textContent === currentQuestion.correctAnswer) {
+        btn.classList.add("correct");
+      } else if (btn === buttonClicked) {
+        btn.classList.add("incorrect");
+      }
+    });
+
+    explanationText.textContent = currentQuestion.explanation;
+    explanationText.classList.remove("hidden");
+    nextButton.classList.remove("hidden");
+  }
 }
 
 function nextQuestion() {
