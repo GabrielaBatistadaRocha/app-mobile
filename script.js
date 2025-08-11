@@ -4,13 +4,28 @@ const questionBank = {
       question: "Qual é o valor de x na equação 2x + 3 = 7?",
       answers: ["1", "2", "3", "4"],
       correctAnswer: "2",
-      explanation: "Subtraindo 3 de ambos os lados: 2x = 4 → x = 2."
+      explanation: "Subtraindo 3 de ambos os lados: 2x = 4 → x = 2.",
+      topic: "Álgebra",
+      difficulty: "easy",
+      exam: ["enem", "uel"]
     },
     {
       question: "Qual é a derivada de x²?",
       answers: ["2x", "x", "x²", "1"],
       correctAnswer: "2x",
-      explanation: "A derivada de x² em relação a x é 2x, pela regra do poder."
+      explanation: "A derivada de x² em relação a x é 2x, pela regra do poder.",
+      topic: "Cálculo",
+      difficulty: "medium",
+      exam: ["uel"]
+    },
+    {
+      question: "Um carro percorre 120 km em 2 horas. Qual a sua velocidade média em km/h?",
+      answers: ["40", "50", "60", "70"],
+      correctAnswer: "60",
+      explanation: "Velocidade média é a distância percorrida dividida pelo tempo. 120 km / 2 h = 60 km/h.",
+      topic: "Física",
+      difficulty: "easy",
+      exam: ["enem", "uel"]
     }
   ],
   ciencias: [
@@ -18,7 +33,19 @@ const questionBank = {
       question: "Qual é a função da mitocôndria?",
       answers: ["Produzir energia", "Digestão celular", "Síntese de proteínas", "Transporte de nutrientes"],
       correctAnswer: "Produzir energia",
-      explanation: "A mitocôndria é responsável pela respiração celular e produção de ATP."
+      explanation: "A mitocôndria é responsável pela respiração celular e produção de ATP.",
+      topic: "Biologia",
+      difficulty: "easy",
+      exam: ["enem"]
+    },
+    {
+      question: "O que é o processo de fotossíntese?",
+      answers: ["Produção de energia pela queima de glicose", "Transformação de luz solar em energia química", "Troca de gases entre o organismo e o ambiente", "Divisão celular"],
+      correctAnswer: "Transformação de luz solar em energia química",
+      explanation: "Fotossíntese é o processo pelo qual plantas e outros organismos convertem energia luminosa em energia química.",
+      topic: "Biologia",
+      difficulty: "medium",
+      exam: ["enem", "uel"]
     }
   ],
   humanas: [
@@ -26,7 +53,19 @@ const questionBank = {
       question: "Quem foi o autor do contrato social?",
       answers: ["Rousseau", "Marx", "Locke", "Hobbes"],
       correctAnswer: "Rousseau",
-      explanation: "Jean-Jacques Rousseau escreveu 'O Contrato Social' em 1762."
+      explanation: "Jean-Jacques Rousseau escreveu 'O Contrato Social' em 1762.",
+      topic: "Filosofia",
+      difficulty: "medium",
+      exam: ["uel"]
+    },
+    {
+      question: "A Crise de 1929 teve início em qual país?",
+      answers: ["Reino Unido", "Alemanha", "Estados Unidos", "França"],
+      correctAnswer: "Estados Unidos",
+      explanation: "A Grande Depressão teve início com a quebra da Bolsa de Valores de Nova York, nos Estados Unidos.",
+      topic: "História",
+      difficulty: "easy",
+      exam: ["enem", "uel"]
     }
   ],
   linguagens: [
@@ -34,7 +73,19 @@ const questionBank = {
       question: "Qual figura de linguagem está presente em 'Ela chorava rios de lágrimas'?",
       answers: ["Metáfora", "Hipérbole", "Ironia", "Antítese"],
       correctAnswer: "Hipérbole",
-      explanation: "Hipérbole é o exagero proposital para enfatizar uma ideia."
+      explanation: "Hipérbole é o exagero proposital para enfatizar uma ideia.",
+      topic: "Literatura",
+      difficulty: "easy",
+      exam: ["enem"]
+    },
+    {
+      question: "Qual o principal objetivo de um texto dissertativo-argumentativo?",
+      answers: ["Narrar uma história", "Descrever um lugar", "Defender um ponto de vista", "Expor informações"],
+      correctAnswer: "Defender um ponto de vista",
+      explanation: "O texto dissertativo-argumentativo busca convencer o leitor sobre uma ideia, usando argumentos.",
+      topic: "Redação",
+      difficulty: "medium",
+      exam: ["enem", "uel"]
     }
   ]
 };
@@ -52,6 +103,7 @@ const historyContainer = document.getElementById("history-container");
 const scoreChartElement = document.getElementById("scoreChart");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const aside = document.getElementById("aside-container");
+const main = document.querySelector("main");
 
 darkModeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
@@ -85,6 +137,7 @@ function startQuiz(subject) {
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
   aside.classList.add("hidden");
+  main.classList.add("full-width");
 
   displayQuestion();
 }
@@ -165,9 +218,11 @@ function nextQuestion() {
 function showFinalScore() {
   quizContainer.classList.add("hidden");
   resultContainer.classList.remove("hidden");
-  aside.classList.remove("hidden");
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
+
+  aside.classList.remove("hidden");
+  main.classList.remove("full-width");
 
   const total = selectedQuestions.length;
   const timestamp = new Date().toLocaleString();
@@ -268,6 +323,7 @@ function restartQuiz() {
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
   aside.classList.add("hidden");
+  main.classList.add("full-width");
   welcomeScreen.classList.remove("hidden");
 }
 
