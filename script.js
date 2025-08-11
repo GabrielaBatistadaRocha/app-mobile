@@ -194,7 +194,7 @@ function startQuiz(mode) {
   welcomeScreen.classList.add("hidden");
   modeSelection.classList.add("hidden");
   quizContainer.classList.remove("hidden");
-  [resultContainer, historyContainer, scoreChartElement, reviewContainer, aside].forEach(el => el.classList.add("hidden"));
+  [resultContainer, historyContainer, scoreChartElement, reviewContainer, aside, quizResultChartElement].forEach(el => el.classList.add("hidden"));
   main.classList.add("full-width");
 
   if (quizState.isSimuladoMode) {
@@ -319,10 +319,11 @@ function showFinalScore() {
     reviewButton.classList.add("hidden");
   }
 
-  // Chamar a função para renderizar o gráfico do quiz atual
+  // A função renderQuizResultChart é chamada aqui!
   renderQuizResultChart();
 }
 
+// NOVO: Função para renderizar o gráfico do quiz atual
 function renderQuizResultChart() {
   if (window.quizResultChart instanceof Chart) {
     window.quizResultChart.destroy();
@@ -463,7 +464,7 @@ function exportCSV() {
 }
 
 function restartQuiz() {
-  [quizContainer, resultContainer, historyContainer, scoreChartElement, reviewContainer, aside].forEach(el => el.classList.add("hidden"));
+  [quizContainer, resultContainer, historyContainer, scoreChartElement, reviewContainer, aside, quizResultChartElement].forEach(el => el.classList.add("hidden"));
   main.classList.add("full-width");
   welcomeScreen.classList.remove("hidden");
   modeSelection.classList.add("hidden");
@@ -473,11 +474,13 @@ function restartQuiz() {
 function toggleHistory() {
   historyContainer.classList.toggle("hidden");
   scoreChartElement.classList.add("hidden");
+  quizResultChartElement.classList.add("hidden"); // Esconder o gráfico do quiz atual
   loadHistory();
 }
 
 function toggleChart() {
   scoreChartElement.classList.toggle("hidden");
   historyContainer.classList.add("hidden");
+  quizResultChartElement.classList.add("hidden"); // Esconder o gráfico do quiz atual
   loadHistory();
 }
