@@ -230,11 +230,11 @@ h1, h2, h3 {
 
 /* Regra para ajustar o tamanho dos gráficos */
 #quiz-result-chart, #scoreChart {
-    max-width: 400px; /* Define uma largura máxima razoável */
-    width: 100%; /* Permite que ele se ajuste em telas menores */
+    max-width: 400px;
+    width: 100%;
     height: auto;
-    margin: 20px auto 0 auto; /* Centraliza o gráfico na horizontal */
-    display: block; /* Garante que as margens funcionem */
+    margin: 20px auto 0 auto;
+    display: block;
 }
 
 /* Estilo para a revisão do quiz */

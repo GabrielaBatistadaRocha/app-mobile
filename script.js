@@ -478,24 +478,26 @@ function restartQuiz() {
   quizState.userAnswers = [];
 }
 
-// Função para alternar a exibição do gráfico do quiz atual
-function toggleQuizChart() {
-  quizResultChartElement.classList.toggle("hidden");
-  // Oculta os outros gráficos e histórico para evitar sobreposição
+// Nova função para esconder todos os elementos de resultado
+function hideAllResultElements() {
   historyContainer.classList.add("hidden");
   scoreChartElement.classList.add("hidden");
+  quizResultChartElement.classList.add("hidden");
+}
+
+function toggleQuizChart() {
+  hideAllResultElements();
+  quizResultChartElement.classList.remove("hidden");
 }
 
 function toggleHistory() {
-  historyContainer.classList.toggle("hidden");
-  scoreChartElement.classList.add("hidden");
-  quizResultChartElement.classList.add("hidden");
+  hideAllResultElements();
+  historyContainer.classList.remove("hidden");
   loadHistory();
 }
 
 function toggleChart() {
-  scoreChartElement.classList.toggle("hidden");
-  historyContainer.classList.add("hidden");
-  quizResultChartElement.classList.add("hidden");
+  hideAllResultElements();
+  scoreChartElement.classList.remove("hidden");
   loadHistory();
 }
