@@ -147,8 +147,10 @@ function setupEventListeners() {
   exportCsvButton.addEventListener('click', exportCSV);
   toggleHistoryButton.addEventListener('click', toggleHistory);
   toggleChartButton.addEventListener('click', toggleChart);
-  backToHomeFromReview.addEventListener('click', restartQuiz);
-  backToHomeFromHistory.addEventListener('click', restartQuiz);
+  
+  // Agora adicionamos os listeners para os botões de voltar aqui, já que eles existem no HTML
+  if (backToHomeFromReview) backToHomeFromReview.addEventListener('click', restartQuiz);
+  if (backToHomeFromHistory) backToHomeFromHistory.addEventListener('click', restartQuiz);
 }
 
 function toggleDarkMode() {
@@ -176,6 +178,12 @@ function shuffleArray(array) {
 }
 
 function startQuiz(mode) {
+  if (!quizState.currentSubject) {
+    // Adiciona uma verificação para evitar o erro, caso o usuário não tenha selecionado a matéria
+    console.error("Nenhuma matéria selecionada.");
+    return;
+  }
+  
   quizState.isSimuladoMode = mode === 'simulado';
   quizState.selectedQuestions = [...questionBank[quizState.currentSubject]];
   shuffleArray(quizState.selectedQuestions);
