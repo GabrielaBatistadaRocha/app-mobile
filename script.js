@@ -139,11 +139,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if(elements.loadingScreen) elements.loadingScreen.classList.add('hidden');
   }, 1000);
   
-  setupEventListeners();
+  setupInitialEventListeners();
   setupThemeToggle();
 });
 
-function setupEventListeners() {
+function setupInitialEventListeners() {
   document.querySelectorAll('.subject-card').forEach(card => {
     card.addEventListener('click', () => selectSubject(card.dataset.subject));
     card.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSubject(card.dataset.subject); } });
@@ -154,26 +154,8 @@ function setupEventListeners() {
     card.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectMode(card.dataset.mode); } });
   });
   
-  elements.nextButton?.addEventListener('click', nextQuestion);
-  
-  document.getElementById('restart-button')?.addEventListener('click', restartQuiz);
-  document.getElementById('toggle-quiz-chart-button')?.addEventListener('click', () => {
-      const chart = document.getElementById('quiz-result-chart');
-      chart.classList.toggle('hidden');
-      if (!chart.classList.contains('hidden')) {
-          renderQuizResultChart();
-      }
-  });
-  document.getElementById('export-csv-button')?.addEventListener('click', exportCSV);
-  document.getElementById('review-button')?.addEventListener('click', toggleReview);
-  
-  document.getElementById('back-to-home-from-review')?.addEventListener('click', restartQuiz);
-  document.getElementById('back-to-home-from-history')?.addEventListener('click', restartQuiz);
-  document.getElementById('back-to-home-from-stats')?.addEventListener('click', restartQuiz);
-
   elements.backToSubjectsButton?.addEventListener('click', backToSubjects);
   elements.pauseButton?.addEventListener('click', togglePause);
-  
   elements.menuToggle?.addEventListener('click', toggleMenu);
   
   elements.menuHistory?.addEventListener('click', (e) => { e.preventDefault(); toggleHistory(); toggleMenu(); });
@@ -262,6 +244,9 @@ function startQuiz() {
   }
   
   showQuestion();
+  if (elements.nextButton) {
+      elements.nextButton.addEventListener('click', nextQuestion);
+  }
 }
 
 function togglePause() {
@@ -416,6 +401,18 @@ function showResults(correctAnswers, total, percentage) {
 
   const reviewButton = document.getElementById('review-button');
   if(reviewButton) reviewButton.classList.remove('hidden');
+
+  // Adiciona os event listeners apenas quando os botões estão visíveis
+  document.getElementById('restart-button')?.addEventListener('click', restartQuiz);
+  document.getElementById('toggle-quiz-chart-button')?.addEventListener('click', () => {
+      const chart = document.getElementById('quiz-result-chart');
+      chart.classList.toggle('hidden');
+      if (!chart.classList.contains('hidden')) {
+          renderQuizResultChart();
+      }
+  });
+  document.getElementById('export-csv-button')?.addEventListener('click', exportCSV);
+  document.getElementById('review-button')?.addEventListener('click', toggleReview);
 }
 
 function renderQuizResultChart() {
@@ -554,6 +551,13 @@ function restartQuiz() {
   quizState.score = 0;
   quizState.userAnswers = [];
   quizState.isPaused = false;
+  
+  // Remove os event listeners dinâmicos para evitar duplicações
+  const nextButton = document.getElementById('next-button');
+  if (nextButton) {
+      nextButton.removeEventListener('click', nextQuestion);
+      nextButton.innerHTML = '<span>Próxima</span><i class="fas fa-arrow-right"></i>';
+  }
 }
 
 function toggleHistory() {
