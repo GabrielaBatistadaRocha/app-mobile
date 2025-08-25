@@ -1,91 +1,236 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Interativo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Quiz Interativo para estudantes - Teste seus conhecimentos em Matemática, Ciências, Humanas e Linguagens" />
+    <meta name="keywords" content="quiz, educação, estudos, vestibular, enem, matemática, ciências" />
+    <meta name="author" content="Quiz Educacional" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Quiz Interativo - Teste seus Conhecimentos" />
+    <meta property="og:description" content="Plataforma de quiz educacional para estudantes se prepararem para vestibulares" />
+    
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Quiz Interativo - Teste seus Conhecimentos" />
+    
+    <title>Quiz Interativo - Teste seus Conhecimentos</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="header-content">
-        <h1>Quiz Interativo</h1>
-        <button id="dark-mode-toggle" title="Alternar modo escuro"><i class="fa-solid fa-moon"></i></button>
-      </div>
-    </header>
-
-    <div id="welcome-screen">
-      <h2>Escolha uma matéria para começar</h2>
-      <div class="card-list" id="subject-cards">
-        <div class="subject-card" data-subject="matematica">
-          <i class="fa-solid fa-calculator"></i>
-          <span>Matemática</span>
-        </div>
-        <div class="subject-card" data-subject="ciencias">
-          <i class="fa-solid fa-flask"></i>
-          <span>Ciências</span>
-        </div>
-        <div class="subject-card" data-subject="humanas">
-          <i class="fa-solid fa-users"></i>
-          <span>Humanas</span>
-        </div>
-        <div class="subject-card" data-subject="linguagens">
-          <i class="fa-solid fa-book-open"></i>
-          <span>Linguagens</span>
-        </div>
-      </div>
-    </div>
-    
-    <div id="mode-selection" class="hidden">
-      <h3>Selecione um modo de jogo</h3>
-      <div class="mode-buttons-container">
-        <button class="mode-button" data-mode="normal">Normal</button>
-        <button class="mode-button" data-mode="simulado">Simulado</button>
-      </div>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Carregando Quiz...</p>
     </div>
 
-    <main id="quiz-container" class="hidden">
-      <div id="timer-bar" class="hidden">
-        <div id="timer-fill"></div>
-      </div>
-      <div id="question-text"></div>
-      <div id="answers-container"></div>
-      <div id="explanation-text" class="hidden"></div>
-      <button id="next-button" class="hidden">Próxima</button>
-    </main>
+    <div class="container">
+        <header role="banner">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1><i class="fas fa-graduation-cap"></i> QuizEdu</h1>
+                    <p class="tagline">Aprenda de forma simples e eficaz</p>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" title="Alternar modo escuro">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <div class="dropdown-menu">
+                        <button id="menu-toggle" class="btn btn-outline no-border" aria-label="Menu de opções">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div id="menu-dropdown" class="dropdown-content hidden">
+                            <a href="#" id="menu-history"><i class="fas fa-history"></i> Histórico</a>
+                            <a href="#" id="menu-stats"><i class="fas fa-chart-line"></i> Estatísticas</a>
+                            <a href="#" id="menu-export"><i class="fas fa-download"></i> Exportar Dados</a>
+                            <a href="#" id="menu-restart"><i class="fas fa-home"></i> Voltar ao Início</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-   <aside id="aside-container" class="hidden">
-      <div id="result-container" class="hidden">
-        <div id="final-score"></div>
-        <canvas id="quiz-result-chart" class="hidden"></canvas>
-        <div class="controls">
-          <button id="toggle-quiz-chart-button">📊 Ver Gráfico do Quiz</button>
-          <button id="review-button" class="hidden">🔍 Revisar Respostas</button>
-          <button id="restart-button">🔄 Reiniciar</button>
-          <button id="export-csv-button">📁 Exportar CSV</button>
-          <button id="toggle-history-button">📜 Ver Histórico</button>
-          <button id="toggle-chart-button">📊 Ver Gráfico Geral</button>
+        <div class="content-container">
+            <main id="welcome-screen" role="main">
+                <section class="hero-section">
+                    <h2>Escolha uma matéria para começar sua jornada</h2>
+                    <p class="hero-description">Teste seus conhecimentos e aprimore seu aprendizado!</p>
+                </section>
+                
+                <section class="subjects-section" aria-label="Seleção de matérias">
+                    <div class="card-grid" id="subject-cards">
+                        <div class="subject-card" data-subject="matematica" tabindex="0" role="button" aria-label="Matemática">
+                            <div class="card-icon"><i class="fas fa-calculator"></i></div>
+                            <div class="card-content">
+                                <h3>Matemática</h3>
+                                <p>Álgebra, Geometria, Cálculo</p>
+                                <div class="card-stats"><span class="question-count">3 questões</span><span class="difficulty easy">Fácil</span></div>
+                            </div>
+                            <div class="card-progress"><div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div><span class="progress-text">0% completo</span></div>
+                        </div>
+                        <div class="subject-card" data-subject="ciencias" tabindex="0" role="button" aria-label="Ciências">
+                            <div class="card-icon"><i class="fas fa-flask"></i></div>
+                            <div class="card-content">
+                                <h3>Ciências</h3>
+                                <p>Biologia, Física, Química</p>
+                                <div class="card-stats"><span class="question-count">2 questões</span><span class="difficulty medium">Médio</span></div>
+                            </div>
+                            <div class="card-progress"><div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div><span class="progress-text">0% completo</span></div>
+                        </div>
+                        <div class="subject-card" data-subject="humanas" tabindex="0" role="button" aria-label="Humanas">
+                            <div class="card-icon"><i class="fas fa-users"></i></div>
+                            <div class="card-content">
+                                <h3>Humanas</h3>
+                                <p>História, Geografia, Filosofia</p>
+                                <div class="card-stats"><span class="question-count">2 questões</span><span class="difficulty medium">Médio</span></div>
+                            </div>
+                            <div class="card-progress"><div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div><span class="progress-text">0% completo</span></div>
+                        </div>
+                        <div class="subject-card" data-subject="linguagens" tabindex="0" role="button" aria-label="Linguagens">
+                            <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                            <div class="card-content">
+                                <h3>Linguagens</h3>
+                                <p>Português, Literatura, Redação</p>
+                                <div class="card-stats"><span class="question-count">2 questões</span><span class="difficulty easy">Fácil</span></div>
+                            </div>
+                            <div class="card-progress"><div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div><span class="progress-text">0% completo</span></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <section id="mode-selection" class="hidden">
+                <div class="mode-selection-content">
+                    <h3>Selecione um modo de jogo</h3>
+                    <div class="mode-grid">
+                        <div class="mode-card" data-mode="normal" tabindex="0" role="button">
+                            <div class="mode-icon"><i class="fas fa-book"></i></div>
+                            <h4>Modo Estudo</h4>
+                            <p>Sem pressa, com explicações detalhadas</p>
+                            <ul class="mode-features">
+                                <li><i class="fas fa-check"></i> Sem timer</li>
+                                <li><i class="fas fa-check"></i> Explicações imediatas</li>
+                                <li><i class="fas fa-check"></i> Feedback visual</li>
+                            </ul>
+                        </div>
+                        <div class="mode-card" data-mode="simulado" tabindex="0" role="button">
+                            <div class="mode-icon"><i class="fas fa-stopwatch"></i></div>
+                            <h4>Modo Simulado</h4>
+                            <p>Simule condições reais de prova</p>
+                            <ul class="mode-features">
+                                <li><i class="fas fa-check"></i> Timer de 3 minutos</li>
+                                <li><i class="fas fa-check"></i> Revisão no final</li>
+                                <li><i class="fas fa-check"></i> Pontuação competitiva</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: var(--spacing-lg );">
+                        <button id="back-to-subjects-button" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar para Matérias
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <main id="quiz-container" class="hidden" role="main">
+                <div class="quiz-header">
+                    <div class="quiz-progress">
+                        <div class="progress-info">
+                            <span id="question-counter">1 de 10</span>
+                            <span id="current-subject"></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar"><div id="quiz-progress-fill" class="progress-fill"></div></div>
+                        </div>
+                    </div>
+                    <div id="timer-container" class="hidden">
+                        <div class="timer-display"><i class="fas fa-clock"></i><span id="timer-text">03:00</span></div>
+                        <div id="timer-bar"><div id="timer-fill"></div></div>
+                    </div>
+                </div>
+                
+                <div id="quiz-content">
+                    <div class="question-container">
+                        <div id="question-text" class="question-text"></div>
+                        <div id="question-meta" class="question-meta">
+                            <span class="topic-tag" id="question-topic"></span>
+                            <span class="difficulty-tag" id="question-difficulty"></span>
+                            <span class="exam-tag" id="question-exam"></span>
+                        </div>
+                    </div>
+                    <div id="answers-container" class="answers-container" role="radiogroup" aria-label="Opções de resposta"></div>
+                    <div id="explanation-container" class="explanation-container hidden">
+                        <div class="explanation-header"><i class="fas fa-lightbulb"></i><h4>Explicação</h4></div>
+                        <div id="explanation-text" class="explanation-text"></div>
+                    </div>
+                </div>
+                
+                <div class="quiz-controls">
+                    <button id="hint-button" class="btn btn-outline hidden"><i class="fas fa-lightbulb"></i><span>Dica</span></button>
+                    <button id="pause-button" class="btn btn-secondary hidden"><i class="fas fa-pause"></i><span>Pausar</span></button>
+                    <button id="next-button" class="btn btn-primary hidden"><span>Próxima</span><i class="fas fa-arrow-right"></i></button>
+                </div>
+            </main>
         </div>
-      </div>
-      
-      <div id="review-container" class="hidden">
-         <button id="back-to-home-from-review">Voltar ao Início</button>
-      </div>
-      
-      <div id="history-container" class="hidden">
-         <button id="back-to-home-from-history">Voltar ao Início</button>
-      </div>
-      
-      <canvas id="scoreChart" class="hidden"></canvas>
-    </aside>
-  </div>
 
-  <script src="script.js"></script>
+        <aside id="aside-container" class="hidden">
+            <div id="result-container" class="hidden">
+                <div class="result-header">
+                    <div class="result-icon"><i id="result-emoji" class="fas fa-trophy"></i></div>
+                    <h3>Quiz Concluído!</h3>
+                </div>
+                <div id="final-score" class="final-score"></div>
+                <canvas id="quiz-result-chart" class="chart hidden"></canvas>
+                <div class="result-controls">
+                    <button id="toggle-quiz-chart-button" class="btn btn-secondary"><i class="fas fa-chart-pie"></i>Ver Gráfico</button>
+                    <button id="review-button" class="btn btn-secondary hidden"><i class="fas fa-search"></i>Revisar Respostas</button>
+                    <button id="restart-button" class="btn btn-primary"><i class="fas fa-redo"></i>Novo Quiz</button>
+                </div>
+                <div class="additional-controls">
+                    <button id="export-csv-button" class="btn btn-outline"><i class="fas fa-download"></i>Exportar Dados</button>
+                    <button id="toggle-history-button" class="btn btn-outline"><i class="fas fa-history"></i>Ver Histórico</button>
+                    <button id="toggle-chart-button" class="btn btn-outline"><i class="fas fa-chart-line"></i>Estatísticas</button>
+                </div>
+            </div>
+            <div id="review-container" class="hidden">
+                <div class="review-header">
+                    <h3><i class="fas fa-search"></i> Revisão do Quiz</h3>
+                    <div class="review-navigation">
+                        <button id="back-to-home-from-review" class="btn btn-secondary"><i class="fas fa-home"></i>Voltar ao Início</button>
+                    </div>
+                </div>
+                <div id="review-content" class="review-content"></div>
+            </div>
+            <div id="history-container" class="hidden">
+                <div class="history-header">
+                    <h3><i class="fas fa-history"></i> Histórico de Pontuação</h3>
+                    <div class="history-navigation">
+                        <button id="back-to-home-from-history" class="btn btn-secondary"><i class="fas fa-home"></i>Voltar ao Início</button>
+                    </div>
+                </div>
+                <div id="history-content" class="history-content"></div>
+            </div>
+            <div id="stats-container" class="hidden">
+                <div class="stats-header">
+                    <h3><i class="fas fa-chart-line"></i> Estatísticas de Desempenho</h3>
+                    <div class="stats-navigation">
+                        <button id="back-to-home-from-stats" class="btn btn-secondary"><i class="fas fa-home"></i>Voltar ao Início</button>
+                    </div>
+                </div>
+                <canvas id="scoreChart" class="chart"></canvas>
+            </div>
+        </aside>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
